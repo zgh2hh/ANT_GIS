@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Draw polygon for spatial query - 4.4</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.4/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.4/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .esri-draw-button {
+      background-color: rgba(255, 255, 255, 0.65);
+      cursor: pointer;
+      display: inline-block;
+      width: 26px;
+      font-size: 1.5em;
+    }
+
+    .esri-draw-button-selected {
+      opacity: 1;
+      background-color: rgba(102, 0, 255, 0.75);
+      color: white;
+    }
+
+    .esri-draw-button-selected:hover {
+      background-color: rgba(102, 0, 255, 0.3);
+      color: white;
+    }
+
+    #instructions {
+      position: absolute;
+      top: 85px;
+      left: 50px;
+      font-size: 24pt;
+      font-weight: 500;
+      color: rgba(102, 0, 255, 1);
+      text-shadow: 0px 0px 20px #3e2727;
+      visibility: hidden;
+    }
+  </style>
+
+  <script>
+    require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/geometry/Polygon",
+        "esri/tasks/QueryTask",
+        "esri/tasks/support/Query",
+        "esri/tasks/support/StatisticDefinition",
+        "esri/symbols/SimpleFillSymbol",
+        "esri/Graphic",
+        "esri/Basemap",
+        "esri/geometry/geometryEngine",
+        "dojo/domReady!"
+      ],
+      function(
+        Map, MapView, Polygon, QueryTask,
+        Query, StatisticDefinition, SimpleFillSymbol, Graphic, Basemap,
+        geometryEngine
+      ) {
+
+        // The drawConfig object contains options related
+        // to custom draw tools created in this app only
+        var drawConfig = {
+          drawingSymbol: new SimpleFillSymbol({
+            color: [102, 0, 255, 0.15],
+            outline: {
+              color: "#6600FF",
+              width: 2
+            }
+          }),
+          finishedSymbol: new SimpleFillSymbol({
+            color: [102, 0, 255, 0.45],
+            outline: {
+              color: "#6600FF",
+              width: 2
+            }
+          }),
+          activePolygon: null,
+          isDrawActive: false
+        };
+
+        var map = new Map({
+          basemap: new Basemap({
+            portalItem: {
+              id: "3582b744bba84668b52a16b0b6942544"
+            }
+          })
+        });
+
+        // configure popup to display query results
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          zoom: 12,
+          center: [-96.8206, 32.7783],
+          popup: {
+            dockEnabled: true,
+            dockOptions: {
+              breakpoint: false,
+              buttonEnabled: false
+            },
+            actions: []
+          }
+        });
+        view.ui.add("draw-button", "top-left");
+
+        var drawButton, pointerDownListener, pointerMoveListener,
+          doubleClickListener;
+
+        view.then(function() {
+          // display view instructions when the view is ready
+          var instructionsElement = document.getElementById(
+            "instructions");
+          instructionsElement.style.visibility = "visible";
+
+          // add click event listener to draw button when view is ready
+          drawButton = document.getElementById("draw-button");
+          drawButton.addEventListener("click", function() {
+
+            // Remove the instructions to click the button
+            // after it is activated for the first time.
+
+            if (instructionsElement) {
+              view.container.removeChild(instructionsElement);
+              instructionsElement = null;
+            }
+
+            if (!drawConfig.isDrawActive) {
+              activateDraw();
+            } else {
+              deactivateDraw();
+              clearPolygon();
+              view.popup.close();
+            }
+          });
+
+          // prevents the popup from unecessarily closing
+          // after drawing has completed
+          view.on("click", function(evt) {
+            evt.stopPropagation();
+          });
+        });
+
+        /**
+         * Activates the drawing tool. When draw tool is active, the
+         * pointer-down, pointer-move, and double-click events on the
+         * view listen for user interaction so drawing can commence.
+         */
+        function activateDraw() {
+          drawConfig.isDrawActive = true;
+          drawButton.classList.toggle("esri-draw-button-selected");
+
+          // remove the previous popup and polygon if they already exist
+          clearPolygon();
+          view.popup.close();
+
+          pointerDownListener = view.on("pointer-down", function(event) {
+            event.stopPropagation();
+            var point = createPoint(event);
+            addVertex(point);
+          });
+          pointerMoveListener = view.on("pointer-move", function(event) {
+            if (drawConfig.activePolygon) {
+              event.stopPropagation();
+
+              var point = createPoint(event);
+              updateFinalVertex(point);
+            }
+          });
+          doubleClickListener = view.on("double-click", function(event) {
+            event.stopPropagation();
+
+            var searchArea = addVertex(event.mapPoint, true);
+
+            // If an invalid search area is entered, then drawing
+            // continues and the query is not executed
+            if (!searchArea) {
+              return null;
+            }
+
+            deactivateDraw();
+
+            // execute query once user finishes drawing
+            // display results in the popup
+            queryBlockGroups(searchArea)
+              .then(function(content) {
+                view.popup.open(content);
+              });
+          });
+        }
+
+        /**
+         * Deactivates drawing on the view. Removes event listeners
+         * and clears the polygon from memory
+         */
+        function deactivateDraw() {
+          drawConfig.isDrawActive = false;
+          drawButton.classList.toggle("esri-draw-button-selected");
+          pointerDownListener.remove();
+          pointerMoveListener.remove();
+          doubleClickListener.remove();
+          drawConfig.activePolygon = null;
+        }
+
+        // Converts screen coordinates returned
+        // from an event to an instance of esri/geometry/Point
+        function createPoint(event) {
+          return view.toMap(event);
+        }
+
+        /**
+         * Adds a vertex to the activePolygon. Fires each time
+         * the view is clicked.
+         * @param {esri/geometry/Point} point - Adds the given poing to the active
+         *   polygon then resets the active polygon.
+         * @return {esri/geometry/Polygon}
+         */
+        function addVertex(point, isFinal) {
+
+          var polygon = drawConfig.activePolygon;
+          var ringLength;
+
+          if (!polygon) {
+            polygon = new Polygon({
+              spatialReference: {
+                wkid: 3857
+              }
+            });
+            polygon.addRing([point, point]);
+          } else {
+            ringLength = polygon.rings[0].length;
+            polygon.insertPoint(0, ringLength - 1, point);
+          }
+
+          drawConfig.activePolygon = polygon;
+          return redrawPolygon(polygon, isFinal);
+        }
+
+        /**
+         * Clears polygon(s) from the view and adds the
+         * given polygon to the view.
+         */
+        function redrawPolygon(polygon, finished) {
+
+          // simplify the geometry so it can be drawn accross
+          // the dateline and accepted as input to other services
+          var geometry = finished ? geometryEngine.simplify(polygon) :
+            polygon;
+
+          if (!geometry && finished) {
+            console.log(
+              "Cannot finish polygon. It must be a triangle at minimum. Resume drawing..."
+            );
+            return null;
+          }
+
+          clearPolygon();
+
+          var polygonGraphic = new Graphic({
+            geometry: geometry,
+            symbol: finished ? drawConfig.finishedSymbol : drawConfig.drawingSymbol
+          });
+
+          view.graphics.add(polygonGraphic);
+          return geometry;
+        }
+
+        /**
+         * Executes on each pointer-move event. Updates the
+         * final vertex of the activePolygon to the given
+         * point.
+         */
+        function updateFinalVertex(point) {
+          var polygon = drawConfig.activePolygon.clone();
+
+          var ringLength = polygon.rings[0].length;
+          polygon.insertPoint(0, ringLength - 1, point);
+          redrawPolygon(polygon);
+        }
+
+        /**
+         * Cleares the drawn polygon in the view. Only one
+         * polygon may be drawn at a time.
+         */
+        function clearPolygon() {
+          var polygonGraphic = view.graphics.find(function(graphic) {
+            return graphic.geometry.type === "polygon";
+          });
+
+          if (polygonGraphic) {
+            view.graphics.remove(polygonGraphic);
+          }
+        }
+
+        // Query US block groups that intersect a county that was clicked
+        var queryBlocksTask = new QueryTask({
+          url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/US_Census_Housing/FeatureServer/3"
+        });
+
+        // ***********************************************************
+        // Query block groups that intersect the given polygon.
+        // Statistics query will return
+        // number of block groups that intersect the polygon, total population,
+        // and land area of intersecting block groups.
+        // ***********************************************************
+
+        function queryBlockGroups(polygon) {
+          // count of block groups that intersect the polygon
+          var countStatDef = new StatisticDefinition({
+            statisticType: "count",
+            onStatisticField: "TOTPOP10",
+            outStatisticFieldName: "numBlockGroups"
+          });
+
+          // sum of population that live in block groups
+          // intersected by the polygon
+          var populationStatDef = new StatisticDefinition({
+            statisticType: "sum",
+            onStatisticField: "TOTPOP10",
+            outStatisticFieldName: "totalPopulation2010"
+          });
+
+          // total land area of block groups that intersect
+          // the polygon
+          var areaStatDef = new StatisticDefinition({
+            statisticType: "sum",
+            onStatisticField: "TOTPOP00",
+            outStatisticFieldName: "totalPopulation2000"
+          });
+
+          var query = new Query({
+            geometry: polygon,
+            outFields: ["*"],
+            spatialRelationship: "intersects",
+            outStatistics: [countStatDef, populationStatDef, areaStatDef],
+          });
+
+          // execute the query task and return the results
+          // as popup content for display to the user
+          return queryBlocksTask.execute(query)
+            .then(function(result) {
+              var stats = result.features[0].attributes;
+
+              var population2010 = numberWithCommas(stats.totalPopulation2010);
+              var numBlockGroups = numberWithCommas(stats.numBlockGroups);
+
+              var change = stats.totalPopulation2010 - stats.totalPopulation2000;
+              var populationChange = change > 0 ? "+" + numberWithCommas(
+                change) : numberWithCommas(change);
+
+              // format the query result for the counties popupTemplate's content.
+              return {
+                title: population2010,
+                content: " people lived in the " + numBlockGroups +
+                  " block groups that intersect this polygon in 2010, a change of " +
+                  populationChange +
+                  " people since 2000."
+              };
+            }).otherwise(function(error) {
+              return {
+                title: "No results",
+                content: "Query executes against U.S. census data." +
+                  " You must draw a polygon within the extent of the United States."
+              };
+            });
+        }
+
+        // formats a number to a string with a thousands separator
+        function numberWithCommas(x) {
+          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+      });
+  </script>
+
+</head>
+
+<body>
+  <div id="viewDiv">
+    <div id="instructions" esri-widget>&lt;-- Click this button to enable drawing</div>
+  </div>
+  <div id="draw-button" class="esri-widget-button esri-widget esri-interactive">
+    <span class="esri-icon-polygon"></span>
+  </div>
+</body>
+
+</html>
