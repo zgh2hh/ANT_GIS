@@ -62,6 +62,14 @@ export const createMap = function (loader, callback) {
             id: 3,
             visible: true,
             title: '卫星图'
+          }, {
+            id: 4,
+            visible: false,
+            title: '田块边界'
+          }, {
+            id: 5,
+            visible: false,
+            title: '田块钾(K)分布'
           }]
       })
       map.add(ntrLayer)

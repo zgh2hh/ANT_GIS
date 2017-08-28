@@ -105,11 +105,7 @@ export default {
             view: view,
             query: query
           })
-          that.classify({
-            tp: that.selected
-          })
         })
-
         that.saveEsri()
       }, {
         url: 'https://js.arcgis.com/4.4/'
@@ -122,13 +118,13 @@ export default {
           view: view,
           query
         })
-        that.classify({
-          tp: that.selected
-        })
-
         that.saveEsri()
       })
     }
+
+    that.classify({
+      tp: that.selected
+    })
   }
 }
 </script>
