@@ -45,31 +45,32 @@ export const createMap = function (loader, callback) {
         url: 'https://60.169.69.3:6443/arcgis/rest/services/ImageService/RS_image/MapServer',
         id: 'image',
         title: '影像',
-        sublayers: [
+        visible: true,
+        sublayers: [// id顺序必须为倒序，否则影像不能同时展示，只能展示一个
           {
-            id: 0,
+            id: 5,
+            visible: false,
+            title: '钾(K)分布'
+          }, {
+            id: 4,
             visible: false,
             title: '磷(P)分布'
           }, {
-            id: 1,
+            id: 3,
             visible: false,
             title: '氮(N)分布'
           }, {
             id: 2,
-            visible: false,
-            title: '钾(K)分布'
-          }, {
-            id: 3,
             visible: true,
             title: '卫星图'
           }, {
-            id: 4,
-            visible: false,
-            title: '田块边界'
-          }, {
-            id: 5,
+            id: 1,
             visible: false,
             title: '田块钾(K)分布'
+          }, {
+            id: 0,
+            visible: false,
+            title: '田块边界'
           }]
       })
       map.add(ntrLayer)

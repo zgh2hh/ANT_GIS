@@ -122,7 +122,7 @@ export default {
       })
     }
 
-    that.classify({
+    this.classify({
       tp: that.selected
     })
   }
