@@ -4,6 +4,8 @@ export const GET_CURRENT_DIST = 'GET_CURRENT_DIST'
 export const SAVE_ESRI_MAP = 'SAVE_ESRI_MAP'
 /** 切换Edit显示、隐藏 **/
 export const TOGGLE_EDIT = 'TOGGLE_EDIT'
+/** 切换认领显示、隐藏 **/
+export const TOGGLE_CLAIM = 'TOGGLE_CLAIM'
 /** 存储trigger-action事件 **/
 export const SAVE_TRIGGER_ACTION = 'SAVE_TRIGGER_ACTION'
 /** 获取田块详情 **/

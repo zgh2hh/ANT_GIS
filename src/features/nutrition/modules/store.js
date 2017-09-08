@@ -8,6 +8,7 @@ const state = {
   query: null,
   current: 'N',
   editVisible: false,
+  claimVisible: false,
   triggerAction: null,
   fieldDetail: {
     attributes: {},
@@ -27,6 +28,9 @@ const mutations = {
   },
   [types.TOGGLE_EDIT] (state, payload) {
     state.editVisible = !state.editVisible
+  },
+  [types.TOGGLE_CLAIM] (state, payload) {
+    state.claimVisible = !state.claimVisible
   },
   [types.SAVE_TRIGGER_ACTION] (state, payload) {
     state.triggerAction = payload.triggerAction

@@ -28,11 +28,19 @@
               </label>
             </div>
           </div>
+          <div class="field">
+            <p class="control">
+              <button class="button is-success" @click="_toggleClaim" :disabled='showClaim'>
+                认领田块
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </nav>
     <div id="viewDiv" class="balt-theme"></div>
     <Edit :show='showEdit' :field='field'></Edit>
+    <Claim :show='showClaim'></Claim>
   </div>
 </template>
 
@@ -41,9 +49,10 @@ import * as esriLoader from 'esri-loader'
 import { createMap } from '../components/esrimapPingPu'
 import { mapActions, mapGetters } from 'vuex'
 import Edit from './edit'
+import Claim from './claim'
 export default {
   components: {
-    Edit
+    Edit, Claim
   },
   data () {
     return {
@@ -58,7 +67,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'showEdit', 'field'
+      'showEdit', 'showClaim', 'field'
     ])
   },
   methods: {
@@ -89,6 +98,9 @@ export default {
           }
         })
       }
+    },
+    _toggleClaim () {
+      this.$store.commit('TOGGLE_CLAIM')
     }
   },
   mounted () {

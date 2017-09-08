@@ -8,6 +8,10 @@ export const K = (state) => state.K
 export const showEdit = (state) => {
   return state.editVisible
 }
+/** 认领框是否展示 */
+export const showClaim = (state) => {
+  return state.claimVisible
+}
 /** 获取田块信息 **/
 export const field = (state) => {
   return state.fieldDetail
