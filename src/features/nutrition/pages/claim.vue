@@ -69,21 +69,30 @@ export default {
     },
     save (evt) {
       evt.stopPropagation()
-      const { map, current } = this.$store.state.nutrition
+      const { map, ESRI } = this.$store.state.nutrition
       let that = this
-      let featureLyr = map.findLayerById(current.toLocaleLowerCase())
-      if (featureLyr) {
+      let featureLyr = map.findLayerById('draw')
+      let fieldId2Username = map.findLayerById('id2username')
+      if (featureLyr && fieldId2Username) {
         that.querySelectedFields(featureLyr, that.geometry).then(function (results) {
           if (results.features && results.features.length > 0) {
-            let editFeatures = []
+            let addFeatures = []
             results.features.forEach((item) => {
-              item.attributes.objectId = item.attributes.objectid
-              item.attributes.user_name = that.$refs.userName.value.trim()
-              editFeatures.push(item)
+              debugger
+              let attributes = {}
+              attributes['field_id'] = item.attributes.field_id
+              attributes['user_name'] = that.$refs.userName.value.trim()
+
+              // 几何信息没有必要存储
+              var addFeature = new ESRI.Graphic({
+                // geometry: item.geometry,
+                attributes: attributes
+              })
+              addFeatures.push(addFeature)
             })
 
-            featureLyr.applyEdits({
-              updateFeatures: editFeatures
+            fieldId2Username.applyEdits({
+              addFeatures: addFeatures
             }).then((result) => {
               that.$children[0].clearPolygon()
               that.$store.commit(types.TOGGLE_CLAIM)

@@ -80,6 +80,26 @@ export const createMap = function (loader, callback) {
         title: '平铺镇边界'
       })
       map.add(bounds)  // adds the layer to the map
+      // 5.加载平铺和许镇所有田块
+      var draw = new FeatureLayer({
+        id: 'draw',
+        title: '平铺和许镇所有田块',
+        url: 'https://60.169.69.3:6443/arcgis/rest/services/FeatureService/FeatureService/FeatureServer/2',
+        outFields: ['*'],
+        popupTemplate: { // autocast as esri/PopupTemplate
+          title: '田块详情',
+          content: '田块ID：{field_id}, 已认领'
+        }
+      })
+      map.add(draw)
+      // 6.加载田块id与username对应表
+      var fieldId2Username = new FeatureLayer({
+        id: 'id2username',
+        title: '田块id和大户对应表',
+        url: 'https://60.169.69.3:6443/arcgis/rest/services/FeatureService/FeatureService/FeatureServer/3',
+        outFields: ['*']
+      })
+      map.add(fieldId2Username)
 
       view.then(() => {
         const legend = new Legend({
