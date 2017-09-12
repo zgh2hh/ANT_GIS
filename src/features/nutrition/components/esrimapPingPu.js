@@ -81,11 +81,6 @@ export const createMap = function (loader, callback) {
       })
       map.add(bounds)  // adds the layer to the map
       // 5.加载平铺和许镇所有田块
-      // , {
-      //   fieldName: 'relationships/0/user_name',
-      //   visible: true,
-      //   label: '所属大户'
-      // }
       var draw = new FeatureLayer({
         id: 'draw',
         title: '平铺和许镇所有田块',
@@ -104,10 +99,11 @@ export const createMap = function (loader, callback) {
                 fieldName: 'field_name',
                 visible: true,
                 label: '田块名称'
-              }, {
+              }, {// 折腾好久，艹
                 fieldName: 'relationships/0/user_name',
                 visible: true,
-                label: '所属大户'
+                label: '所属大户',
+                statisticType: 'min'
               }]
             }
           ]
