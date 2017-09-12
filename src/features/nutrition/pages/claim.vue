@@ -32,6 +32,7 @@
 
 <script>
 import * as types from '../modules/mutationTypes'
+import { mapActions, mapGetters } from 'vuex'
 import Draw from './draw'
 export default {
   components: {
@@ -53,6 +54,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['selectedFieldsFeatures', 'selectedUserFeatures']),
     classObject: function () {
       return {
         card: true,
@@ -61,6 +63,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['queryFieldsByGeometry', 'queryUsernameByFieldId', 'addFeatures', 'editFeatures']),
     cancel (evt) {
       evt.stopPropagation()
       this.$children[0].clearPolygon()
@@ -69,49 +72,81 @@ export default {
     },
     save (evt) {
       evt.stopPropagation()
-      const { map, ESRI } = this.$store.state.nutrition
+      this.$store.commit(types.CLEAR_SELECTED_RECORDS)
+
+      let formUserName = this.$refs.userName.value.trim() || ''
+      const { map } = this.$store.state.nutrition
       let that = this
       let featureLyr = map.findLayerById('draw')
       let fieldId2Username = map.findLayerById('id2username')
       if (featureLyr && fieldId2Username) {
-        that.querySelectedFields(featureLyr, that.geometry).then(function (results) {
-          if (results.features && results.features.length > 0) {
-            let addFeatures = []
-            results.features.forEach((item) => {
-              debugger
-              let attributes = {}
-              attributes['field_id'] = item.attributes.field_id
-              attributes['user_name'] = that.$refs.userName.value.trim()
-
-              // 几何信息没有必要存储
-              var addFeature = new ESRI.Graphic({
-                // geometry: item.geometry,
-                attributes: attributes
+        return (async () => {
+          try {
+            await that.queryFieldsByGeometry({
+              featureLyr: featureLyr,
+              geometry: that.geometry
+            })
+            for (let i in that.selectedFieldsFeatures) {
+              await that.queryUsernameByFieldId({
+                featureLyr: fieldId2Username,
+                fieldId: that.selectedFieldsFeatures[i].attributes.field_id
               })
-              addFeatures.push(addFeature)
-            })
-
-            fieldId2Username.applyEdits({
-              addFeatures: addFeatures
-            }).then((result) => {
-              that.$children[0].clearPolygon()
-              that.$store.commit(types.TOGGLE_CLAIM)
-            }, (err) => {
-              console.log(err)
-            })
+            }
+            let addFeatures = []
+            let editFeatures = []
+            for (let user of that.selectedUserFeatures) {
+              if (user.features.length === 0) { // 新增
+                let param = that.addFeatureParam(user.fieldId, formUserName)
+                addFeatures.push(param)
+              } else { // 编辑
+                let param = that.editFeatureParam(user.features[0], formUserName)
+                editFeatures.push(param)
+              }
+            }
+            if (addFeatures.length > 0) {
+              await that.addFeatures({
+                fieldId2Username,
+                addFeatures
+              })
+            }
+            if (editFeatures.length > 0) {
+              await that.editFeatures({
+                fieldId2Username,
+                editFeatures
+              })
+            }
+            that.$children[0].clearPolygon()
+            that.$store.commit(types.TOGGLE_CLAIM)
+          } catch (err) {
+            console.error(err)
           }
-        }, (err) => {
-          console.log(err)
-        })
+        })()
       }
     },
-    querySelectedFields (featureLyr, geometry) {
-      let query = featureLyr.createQuery()
-      query.where = '1 = 1'
-      query.geometry = geometry
-      query.spatialRelationship = 'intersects'
+    addFeatureParam (fieldId, formUserName) {
+      const { ESRI } = this.$store.state.nutrition
+      let attributes = {}
+      attributes['field_id'] = fieldId
+      attributes['user_name'] = formUserName
 
-      return featureLyr.queryFeatures(query)
+      // 几何信息没有必要存储
+      return new ESRI.Graphic({
+        // geometry: item.geometry,
+        attributes: attributes
+      })
+    },
+    editFeatureParam (editFeature, formUserName) {
+      let oldUsername = editFeature.attributes.user_name
+      let usernames = []
+      if (oldUsername && oldUsername.length > 0) {
+        usernames = oldUsername.split(',')
+      }
+      if (!usernames.includes(formUserName)) {
+        usernames.push(formUserName)
+      }
+      editFeature.attributes.user_name = usernames.join()
+      editFeature.attributes.objectId = editFeature.attributes.objectid
+      return editFeature
     },
     modifyShape () {
       this.startDraw = !this.startDraw

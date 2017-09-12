@@ -14,3 +14,9 @@ export const GET_FIELD_DETAIL = 'GET_FIELD_DETAIL'
 export const SAVE_ESRI_CLASS = 'SAVE_ESRI_CLASS'
 /** 更新田块信息 **/
 export const UPDATE_FIELD = 'UPDATE_FIELD'
+/** 根据多边形查询田块 **/
+export const QUERY_FIELD_BY_POLYGON = 'QUERY_FIELD_BY_POLYGON'
+/** 根据fieldId查询username**/
+export const QUERY_USERNAME_BY_FIELDID = 'QUERY_USERNAME_BY_FIELDID'
+/** 清除多边形查询出的田块 **/
+export const CLEAR_SELECTED_RECORDS = 'CLEAR_SELECTED_RECORDS'

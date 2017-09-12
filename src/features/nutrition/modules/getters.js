@@ -16,3 +16,11 @@ export const showClaim = (state) => {
 export const field = (state) => {
   return state.fieldDetail
 }
+/** 所画田块**/
+export const selectedFieldsFeatures = (state) => {
+  return state.spatialQuery.selectedFields
+}
+/** 所画田块id对应的users**/
+export const selectedUserFeatures = (state) => {
+  return state.spatialQuery.selectedUsers
+}

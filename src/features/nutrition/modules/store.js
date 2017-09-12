@@ -1,3 +1,4 @@
+import Vue from 'Vue'
 import * as types from './mutationTypes'
 import * as actions from './actions'
 import * as getters from './getters'
@@ -14,7 +15,11 @@ const state = {
     attributes: {},
     geometry: {}
   },
-  ESRI: null
+  ESRI: null,
+  spatialQuery: {
+    selectedFields: null,
+    selectedUsers: []
+  }
 }
 
 const mutations = {
@@ -41,6 +46,22 @@ const mutations = {
   },
   [types.SAVE_ESRI_CLASS] (state, payload) {
     state.ESRI = payload
+  },
+  [types.QUERY_FIELD_BY_POLYGON] (state, payload) {
+    state.spatialQuery.selectedFields = Object.assign({}, state.spatialQuery.selectedFields, payload.features)
+  },
+  [types.QUERY_USERNAME_BY_FIELDID] (state, payload) {
+    // 一个田块对应一条记录，不管有多少所属用户
+    Vue.set(state.spatialQuery.selectedUsers, state.spatialQuery.selectedUsers.length, {
+      fieldId: payload.fieldId,
+      features: payload.features
+    })
+  },
+  [types.CLEAR_SELECTED_RECORDS] (state, payload) {
+    state.spatialQuery = Object.assign({}, {
+      selectedFields: null,
+      selectedUsers: []
+    })
   }
 }
 

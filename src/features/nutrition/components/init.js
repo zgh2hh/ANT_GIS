@@ -22,6 +22,8 @@ export function loadEsri (callback) {
       'esri/Graphic',
       'esri/geometry/geometryEngine',
       'esri/geometry/Polygon',
+      'esri/tasks/QueryTask',
+      'esri/tasks/support/RelationshipQuery',
       'dojo/domReady!'
     ],
   (
@@ -43,7 +45,9 @@ export function loadEsri (callback) {
     TextSymbol,
     Graphic,
     geometryEngine,
-    Polygon
+    Polygon,
+    QueryTask,
+    RelationshipQuery
   ) => {
     callback({
       esriConfig,
@@ -64,7 +68,9 @@ export function loadEsri (callback) {
       TextSymbol,
       Graphic,
       geometryEngine,
-      Polygon
+      Polygon,
+      QueryTask,
+      RelationshipQuery
     })
   })
 }
