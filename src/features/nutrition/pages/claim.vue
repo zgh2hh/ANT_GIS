@@ -82,11 +82,14 @@ export default {
       if (featureLyr && fieldId2Username) {
         return (async () => {
           try {
+            // 根据所绘制田块，查询出对应的所有田块
             await that.queryFieldsByGeometry({
               featureLyr: featureLyr,
               geometry: that.geometry
             })
+            // 遍历所查出的田块
             for (let i in that.selectedFieldsFeatures) {
+              // 根据fieldId关联查询field_id_2_user表/featureLayer(此表用于记录田块id和username对应关系)
               await that.queryUsernameByFieldId({
                 featureLyr: fieldId2Username,
                 fieldId: that.selectedFieldsFeatures[i].attributes.field_id
@@ -94,22 +97,25 @@ export default {
             }
             let addFeatures = []
             let editFeatures = []
+            // 遍历field_id_2_user表/featureLayer中对应的记录
             for (let user of that.selectedUserFeatures) {
-              if (user.features.length === 0) { // 新增
+              if (user.features.length === 0) { // 如果此field_id没有对应的记录，则为新增
                 let param = that.addFeatureParam(user.fieldId, formUserName)
                 addFeatures.push(param)
-              } else { // 编辑
+              } else { // 否则为编辑
                 let param = that.editFeatureParam(user.features[0], formUserName)
                 editFeatures.push(param)
               }
             }
             if (addFeatures.length > 0) {
+              // 批量向field_id_2_user表/featureLayer中添加新纪录， fieldid对应的username
               await that.addFeatures({
                 fieldId2Username,
                 addFeatures
               })
             }
             if (editFeatures.length > 0) {
+              // 批量编辑field_id_2_user表/featureLayer中已经存在的记录
               await that.editFeatures({
                 fieldId2Username,
                 editFeatures
