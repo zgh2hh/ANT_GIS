@@ -2,6 +2,7 @@ import * as types from './mutationTypes'
 import * as actions from './actions'
 
 const state = {
+  user: {},
   allLayers: [],
   selectedLayers: []
 }
@@ -10,6 +11,7 @@ const getters = {
   Route: (state, getters, rootState) => {
     return rootState.route
   },
+  User: state => state.user,
   getAllLayers: state => state.allLayers,
   getSelectedLayers: state => state.selectedLayers
 }
@@ -49,6 +51,9 @@ const mutations = {
       return layer.id === layerId
     })
     state.selectedLayers.splice(state.selectedLayers.indexOf(selected), 1)
+  },
+  [types.CHECK_CODE] (state, data) {
+    state.user = data
   }
 }
 

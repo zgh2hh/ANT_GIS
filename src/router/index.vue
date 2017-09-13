@@ -9,3 +9,18 @@
     name: 'main'
   }
 </script>
+<style>
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: "Microsoft YaHei";
+}
+#app {
+  height: 100%;
+  text-align: center;
+}
+</style>
+
