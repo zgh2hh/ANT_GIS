@@ -51,8 +51,11 @@
         this.isLogin = true
         this.checkCaptcha(this.form).then(() => {
           this.isLogin = false
+          this.$router.push({name: 'main'})
+          window.localStorage.setItem('username', this.$store.state.common.user.user_name)
         }).catch(() => {
           this.isLogin = false
+          window.localStorage.setItem('username', '')
         })
       },
       _getCode () {
@@ -92,6 +95,7 @@
     right: 0px;
     font-size: 14px;
     color: #aebdc9;
+    text-align: center;
   }
 
   .login-wrap {

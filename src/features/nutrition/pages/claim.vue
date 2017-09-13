@@ -14,7 +14,7 @@
           <div class="field-body">
             <div class="field">
               <div class="control">
-                <input class="input" type="text" placeholder="请输入用户名" ref="userName" :value="18130321306">
+                <input class="input" type="text" placeholder="请输入用户名" ref="userName" :value="getUsername()" disabled>
               </div>
             </div>
           </div>
@@ -169,6 +169,9 @@ export default {
       if (window.confirm('继续绘制吗?')) {
         this.startDraw = true
       }
+    },
+    getUsername () {
+      return window.localStorage.getItem('username')
     }
   }
 }
