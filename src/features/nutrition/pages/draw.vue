@@ -16,7 +16,8 @@ export default {
       pointerDownListener: null,
       pointerMoveListener: null,
       doubleClickListener: null,
-      clickListener: null
+      clickListener: null,
+      graphicId: 0
     }
   },
   watch: {
@@ -26,6 +27,7 @@ export default {
         return
       }
       if (val) {
+        this.graphicId = this.graphicId + 1
         this.drawConfig = {
           drawingSymbol: new ESRI.SimpleFillSymbol({
             color: [102, 0, 255, 0.15],
@@ -77,6 +79,9 @@ export default {
       this.clearPolygon()
 
       var polygonGraphic = new ESRI.Graphic({
+        attributes: {
+          id: this.graphicId
+        },
         geometry: geometry,
         symbol: finished ? this.drawConfig.finishedSymbol : this.drawConfig.drawingSymbol
       })
@@ -89,14 +94,30 @@ export default {
      * polygon may be drawn at a time.
      */
     clearPolygon () {
+      let that = this
       const { view } = this.$store.state.nutrition
       var polygonGraphic = view.graphics.find(function (graphic) {
-        return graphic.geometry.type === 'polygon'
+        // return graphic.geometry.type === 'polygon'
+        return graphic.attributes.id === that.graphicId
       })
 
       if (polygonGraphic) {
         view.graphics.remove(polygonGraphic)
       }
+    },
+    /**
+     * Cleares all polygons in the view.
+     *
+     */
+    clearAllPolygons () {
+      const { view } = this.$store.state.nutrition
+      let result = []
+      view.graphics.forEach((graphic) => {
+        result.push(graphic)
+      })
+      result.forEach((graphic) => {
+        view.graphics.remove(graphic)
+      })
     },
     /**
      * Activates the drawing tool. When draw tool is active, the
@@ -157,6 +178,7 @@ export default {
       this.doubleClickListener.remove()
       this.clickListener.remove()
       this.drawConfig.activePolygon = null
+      this.$emit('deactivated')
     },
     // Converts screen coordinates returned
     // from an event to an instance of esri/geometry/Point

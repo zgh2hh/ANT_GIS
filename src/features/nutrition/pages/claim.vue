@@ -21,9 +21,9 @@
         </div>
       </div>
     </div>
-    <Draw :active="startDraw"  v-on:finish="finishDraw"></Draw>
+    <Draw :active="startDraw"  v-on:finish="finishDraw" v-on:deactivated="deactivated"></Draw>
     <footer class="card-footer">
-      <a :class="[startDraw ? disabled : '', cardFooterItem]" @click="modifyShape">{{this.startDraw ? '绘制中...' : '框选范围'}}</a>
+      <a :class="[startDraw ? disabled : '', cardFooterItem]" @click="modifyShape">{{this.startDraw ? '绘制中...' : '绘制范围'}}</a>
       <a :class="[startDraw ? disabled : '', cardFooterItem]" @click="save">确认认领</a>
       <a class="card-footer-item" href='javascipt:void(0)' @click="cancel">取消</a>
     </footer>
@@ -49,6 +49,7 @@ export default {
     return {
       startDraw: false,
       geometry: null,
+      geometries: [],
       cardFooterItem: 'card-footer-item',
       disabled: 'disabled'
     }
@@ -66,7 +67,7 @@ export default {
     ...mapActions(['queryFieldsByGeometry', 'queryUsernameByFieldId', 'addFeatures', 'editFeatures']),
     cancel (evt) {
       evt.stopPropagation()
-      this.$children[0].clearPolygon()
+      this.$children[0].clearAllPolygons()
       this.startDraw = false
       this.$store.commit('TOGGLE_CLAIM')
     },
@@ -121,7 +122,7 @@ export default {
                 editFeatures
               })
             }
-            that.$children[0].clearPolygon()
+            that.$children[0].clearAllPolygons()
             that.$store.commit(types.TOGGLE_CLAIM)
           } catch (err) {
             console.error(err)
@@ -158,8 +159,16 @@ export default {
       this.startDraw = !this.startDraw
     },
     finishDraw (geometry) {
-      this.geometry = geometry
+      // this.geometry = geometry
+      this.geometries.push(geometry)
       this.startDraw = false
+      const { ESRI } = this.$store.state.nutrition
+      this.geometry = ESRI.geometryEngine.union(this.geometries)
+    },
+    deactivated () {
+      if (window.confirm('继续绘制吗?')) {
+        this.startDraw = true
+      }
     }
   }
 }
