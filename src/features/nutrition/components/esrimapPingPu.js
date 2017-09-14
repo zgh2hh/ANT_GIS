@@ -9,6 +9,8 @@ export const createMap = function (loader, callback) {
       'esri/layers/Layer',
       'esri/layers/FeatureLayer',
       'esri/layers/MapImageLayer',
+      'esri/renderers/SimpleRenderer',
+      'esri/symbols/TextSymbol',
       'esri/widgets/Expand',
       'esri/widgets/Legend',
       'esri/widgets/LayerList',
@@ -22,6 +24,8 @@ export const createMap = function (loader, callback) {
       Layer,
       FeatureLayer,
       MapImageLayer,
+      SimpleRenderer,
+      TextSymbol,
       Expand,
       Legend,
       LayerList,
@@ -83,7 +87,7 @@ export const createMap = function (loader, callback) {
       // 5.加载平铺和许镇所有田块
       var draw = new FeatureLayer({
         id: 'draw',
-        title: '平铺和许镇所有田块',
+        title: '所有田块',
         url: 'https://60.169.69.3:6443/arcgis/rest/services/FeatureService/FeatureService/FeatureServer/2',
         outFields: ['*'],
         popupTemplate: { // autocast as esri/PopupTemplate
@@ -110,13 +114,32 @@ export const createMap = function (loader, callback) {
         }
       })
       map.add(draw)
+
+      var renderer = new SimpleRenderer({
+        // Define a default Text symbol. This
+        symbol: new TextSymbol({
+          color: 'black',
+          haloColor: 'black',
+          haloSize: '1px',
+          text: '已认领',
+          xoffset: 0,
+          yoffset: 0,
+          font: {
+            size: 10,
+            family: 'Arial',
+            weight: 'bolder'
+          }
+        }),
+        label: 'asd'
+      })
       // 6.加载田块id与username对应表
       var fieldId2Username = new FeatureLayer({
         id: 'id2username',
-        title: '田块id和大户对应表',
+        title: '已认领',
         url: 'https://60.169.69.3:6443/arcgis/rest/services/FeatureService/FeatureService/FeatureServer/3',
         outFields: ['user_name', 'objectid', 'field_id'],
-        objectIdField: 'field_id'
+        objectIdField: 'field_id',
+        renderer: renderer
       })
       map.add(fieldId2Username)
 
@@ -144,13 +167,13 @@ export const createMap = function (loader, callback) {
         view.ui.add(layersExpand, 'top-right')
         view.ui.add(legendExpand, 'top-right')
       })
-      const searchWidget = new Search({
-        view: view
-      })
-      view.ui.add(searchWidget, {
-        position: 'top-left',
-        index: 0
-      })
+      // const searchWidget = new Search({
+      //   view: view
+      // })
+      // view.ui.add(searchWidget, {
+      //   position: 'top-left',
+      //   index: 0
+      // })
       watchUtils.whenTrue(view, 'stationary', () => {
         callback && callback(map, view)
       })

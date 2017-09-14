@@ -4,15 +4,11 @@
 
 <script>
 export default {
-  created () {
-    // this.$router.beforeEach((to, from, next) => {
-    //   if (!window.localStorage.getItem('username')) {
-    //     this.$router.push({name: 'login'})
-    //   }
-    //   next()
-    // })
-    // this.$router.afterEach((to, from) => {
-    // })
+  mounted () {
+    // 没登录自动调回登录页面
+    if (!window.localStorage.getItem('username')) {
+      this.$router.push({name: 'login'})
+    }
   }
 }
 </script>

@@ -72,6 +72,7 @@ export const queryFieldsByGeometry = ({commit, state}, parmas) => {
   query.where = '1 = 1'
   query.geometry = geometry
   query.spatialRelationship = 'intersects'
+  query.returnGeometry = true
   return new Promise((resolve, reject) => {
     featureLyr.queryFeatures(query).then((results) => {
       commit(types.QUERY_FIELD_BY_POLYGON, {
@@ -86,7 +87,9 @@ export const queryFieldsByGeometry = ({commit, state}, parmas) => {
 
 /** 根据fieldId查询username */
 export const queryUsernameByFieldId = ({commit, state}, parmas) => {
-  let {featureLyr, fieldId} = parmas
+  let {featureLyr, fieldId, geometry} = parmas
+  const { ESRI } = state
+  let center = new ESRI.Point(geometry.centroid)
   let query = featureLyr.createQuery()
   query.where = 'field_id = ' + fieldId
   query.outFields = ['*']
@@ -94,7 +97,8 @@ export const queryUsernameByFieldId = ({commit, state}, parmas) => {
     featureLyr.queryFeatures(query).then((results) => {
       commit(types.QUERY_USERNAME_BY_FIELDID, {
         'features': results.features,
-        'fieldId': fieldId
+        'fieldId': fieldId,
+        'geometry': center
       })
       resolve(results)
     }, (err) => {

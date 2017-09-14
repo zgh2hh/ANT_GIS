@@ -54,7 +54,8 @@ const mutations = {
     // 一个田块对应一条记录，不管有多少所属用户
     Vue.set(state.spatialQuery.selectedUsers, state.spatialQuery.selectedUsers.length, {
       fieldId: payload.fieldId,
-      features: payload.features
+      features: payload.features,
+      geometry: payload.geometry
     })
   },
   [types.CLEAR_SELECTED_RECORDS] (state, payload) {

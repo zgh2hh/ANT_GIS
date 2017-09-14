@@ -21,6 +21,7 @@ export function loadEsri (callback) {
       'esri/symbols/TextSymbol',
       'esri/Graphic',
       'esri/geometry/geometryEngine',
+      'esri/geometry/Point',
       'esri/geometry/Polygon',
       'esri/tasks/QueryTask',
       'esri/tasks/support/RelationshipQuery',
@@ -45,6 +46,7 @@ export function loadEsri (callback) {
     TextSymbol,
     Graphic,
     geometryEngine,
+    Point,
     Polygon,
     QueryTask,
     RelationshipQuery
@@ -68,6 +70,7 @@ export function loadEsri (callback) {
       TextSymbol,
       Graphic,
       geometryEngine,
+      Point,
       Polygon,
       QueryTask,
       RelationshipQuery
