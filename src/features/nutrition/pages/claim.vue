@@ -25,10 +25,36 @@
     <select-feature :active='startSelect' v-on:selected='selected'></select-feature>
     <high-light :resultFeatures='highLightFeatures'></high-light>
     <footer class="card-footer">
-      <a :class="[startSelect ? disabled : '', cardFooterItem]" @click="selectFeature">{{this.startSelect ? '选择中...' : '点击选择'}}</a>
-      <a :class="[startDraw ? disabled : '', cardFooterItem]" @click="modifyShape">{{this.startDraw ? '绘制中...' : '绘制范围'}}</a>
-      <a :class="[startDraw ? disabled : '', cardFooterItem]" @click="save">确认认领</a>
-      <a class="card-footer-item" href='javascipt:void(0)' @click="cancel">取消</a>
+      <a :class="[(startSelect || startDraw) ? disabled : '', cardFooterItem]" @click="selectFeature" >
+        <span class="icon">
+          <i class="fa fa-hand-pointer-o"></i>
+        </span>
+        <span>
+          {{this.startSelect ? '选择中...' : '点击选择'}}
+        </span>
+      </a>
+      <a :class="[(startDraw || startSelect) ? disabled : '', cardFooterItem]" @click="modifyShape">
+        <span class="icon">
+          <i class="fa fa-crop"></i>
+        </span>
+        <span>
+          {{this.startDraw ? '绘制中...' : '绘制范围'}}
+        </span>
+      </a>
+      <a :class="[geometries.length === 0 ? disabled : '', cardFooterItem]" @click="save">
+        <span class="icon">
+          <i class="fa fa-check"></i>
+        </span>
+        <span>
+          确认认领
+        </span>
+      </a>
+      <a class="card-footer-item" href='javascipt:void(0)' @click="cancel">
+        <span class="icon">
+          <i class="fa fa-times"></i>
+        </span>
+        <span>取消</span>
+      </a>
     </footer>
   </div>
 </template>
@@ -37,8 +63,8 @@
 import * as types from '../modules/mutationTypes'
 import { mapActions, mapGetters } from 'vuex'
 import Draw from './draw'
-import highLight from '../../common/highLight/highLight'
-import selectFeature from '../../common/selectFeature/selectFeature'
+import highLight from '../../../components/common/highLight'
+import selectFeature from '../../../components/common/selectFeature'
 export default {
   components: {
     Draw,
@@ -73,18 +99,21 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['queryFieldsByGeometry', 'queryUsernameByFieldId', 'addFeatures', 'editFeatures']),
+    ...mapActions(['queryFieldsByGeometry', 'queryFeaturesByClick', 'queryUsernameByFieldId', 'addFeatures', 'editFeatures']),
     cancel (evt) {
       evt.stopPropagation()
       this.$children[0].clearAllPolygons()
+      this.startSelect = false
       this.startDraw = false
       this.geometries = []
       this.$store.commit('TOGGLE_CLAIM')
     },
     save (evt) {
       evt.stopPropagation()
+      this.saveFeaturesByDraw()
+    },
+    saveFeaturesByDraw () {
       this.$store.commit(types.CLEAR_SELECTED_RECORDS)
-
       let formUserName = this.$refs.userName.value.trim() || ''
       const { map } = this.$store.state.nutrition
       let that = this
@@ -135,7 +164,9 @@ export default {
             }
             that.$children[0].clearAllPolygons()
             that.$store.commit(types.TOGGLE_CLAIM)
-            this.geometries = []
+            that.geometries = []
+            that.startSelect = false
+            that.startDraw = false
           } catch (err) {
             console.error(err)
           }
@@ -177,6 +208,7 @@ export default {
     finishDraw (geometry) {
       // this.geometry = geometry
       this.geometries.push(geometry)
+      // this.startSelect = false
       this.startDraw = false
       const { ESRI } = this.$store.state.nutrition
       this.geometry = ESRI.geometryEngine.union(this.geometries)
@@ -201,8 +233,7 @@ export default {
       }
     },
     selected (point) {
-      debugger
-      console.log(point)
+      this.finishDraw(point)
     },
     getUsername () {
       return window.localStorage.getItem('username')

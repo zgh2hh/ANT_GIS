@@ -55,3 +55,21 @@ export const checkCaptcha = ({ commit }, params) => {
     })
   })
 }
+
+/** 退出登录 **/
+export const quitLogin = ({ commit }, params) => {
+  return new Promise((resolve, reject) => {
+    axios({
+      method: 'post',
+      url: 'http://www.qmant.com/noa/logout'
+    }).then((res) => {
+      if (res.data.code === 20000) {
+        resolve(res.data)
+      } else {
+        reject(res)
+      }
+    }).catch((error) => {
+      reject(error)
+    })
+  })
+}

@@ -36,6 +36,9 @@
             </p>
           </div>
         </div>
+        <div class='outer-quit'>
+          <button class="button quit" @click='quit'>退出登录</button>
+        </div>
       </div>
     </nav>
     <div id="viewDiv" class="balt-theme"></div>
@@ -71,7 +74,7 @@ export default {
     ])
   },
   methods: {
-    ...mapActions(['classify', 'saveEsri']),
+    ...mapActions(['classify', 'saveEsri', 'quitLogin']),
     _change (value) {
       this.$store.commit('GET_CURRENT_DIST', {current: value})
       this.selected = value
@@ -101,6 +104,13 @@ export default {
     },
     _toggleClaim () {
       this.$store.commit('TOGGLE_CLAIM')
+    },
+    quit (evt) {
+      evt.stopPropagation()
+      this.quitLogin().then(() => {
+        window.localStorage.removeItem('username')
+        this.$router.push({name: 'login'})
+      })
     }
   },
   mounted () {
@@ -187,5 +197,15 @@ input {
   margin-right: 3rem;
   /* opacity: 0.7; */
   border-radius: 6px;
+}
+
+.outer-quit{
+  position: relative;
+}
+
+.quit{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>

@@ -34,8 +34,6 @@ export default {
     activateSelect () {
       const { view } = this.$store.state.nutrition
       let that = this
-      // drawButton.classList.toggle("esri-draw-button-selected");
-
       // prevents the popup from unecessarily closing
       // after drawing has completed
       this.clickListener = view.on('click', function (evt) {
