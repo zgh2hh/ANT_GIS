@@ -18,6 +18,7 @@ export default {
   },
   watch: {
     resultFeatures: function (features, oldVal) {
+      this.clearAllPolygons()
       this.hightLight()
     }
   },
@@ -41,6 +42,20 @@ export default {
           })
         })
         view.graphics.add(polygonGraphic)
+      })
+    },
+    /**
+     * Cleares all polygons in the view.
+     *
+     */
+    clearAllPolygons () {
+      const { view } = this.$store.state.nutrition
+      let result = []
+      view.graphics.forEach((graphic) => {
+        result.push(graphic)
+      })
+      result.forEach((graphic) => {
+        view.graphics.remove(graphic)
       })
     }
   }

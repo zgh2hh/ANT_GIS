@@ -118,7 +118,7 @@ export const createMap = function (loader, callback) {
       var renderer = new SimpleRenderer({
         // Define a default Text symbol. This
         symbol: new TextSymbol({
-          color: 'black',
+          color: 'white',
           haloColor: 'black',
           haloSize: '1px',
           text: '已认领',
