@@ -96,17 +96,27 @@ export const createMap = function (loader, callback) {
             {
               type: 'fields',
               fieldInfos: [{
-                fieldName: 'field_id',
-                visible: true,
-                label: '田块id'
-              }, {
                 fieldName: 'field_name',
                 visible: true,
                 label: '田块名称'
               }, {// 折腾好久，艹
+                fieldName: 'relationships/0/cn_name',
+                visible: true,
+                label: '大户',
+                statisticType: 'min'
+              }, {// 折腾好久，艹
                 fieldName: 'relationships/0/user_name',
                 visible: true,
                 label: '电话',
+                statisticType: 'min'
+              }, {
+                fieldName: 'area_size',
+                visible: true,
+                label: '田块面积'
+              }, {// 折腾好久，艹
+                fieldName: 'relationships/1/crop_name',
+                visible: true,
+                label: '当前种植作物',
                 statisticType: 'min'
               }]
             }
@@ -137,7 +147,7 @@ export const createMap = function (loader, callback) {
         id: 'id2username',
         title: '已认领',
         url: 'https://60.169.69.3:6443/arcgis/rest/services/FeatureService/FeatureService/FeatureServer/3',
-        outFields: ['user_name', 'objectid', 'field_id'],
+        outFields: ['user_name', 'cn_name', 'objectid', 'field_id'],
         objectIdField: 'field_id',
         renderer: renderer
       })
