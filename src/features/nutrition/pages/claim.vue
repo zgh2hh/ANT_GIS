@@ -8,13 +8,25 @@
     <div class="card-content">
       <div class="content">
         <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label">用户名</label>
+          <div class="field-label is-small">
+            <label class="label">电话</label>
           </div>
           <div class="field-body">
             <div class="field">
               <div class="control">
-                <input class="input" type="text" placeholder="请输入用户名" ref="userName" :value="getUsername()" disabled>
+                <input class="input is-small" type="text" placeholder="请输入电话" ref="userName" :value="user['user_name']" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-small">
+            <label class="label">大户</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input class="input is-small" type="text" placeholder="请输入大户名" ref="farmerName" :value="user['cn_name']" disabled>
               </div>
             </div>
           </div>
@@ -96,6 +108,11 @@ export default {
         card: true,
         hide: !this.show
       }
+    },
+    user: function () {
+      let user = window.localStorage.getItem('user')
+      let userObj = JSON.parse(user)
+      return userObj
     }
   },
   methods: {
@@ -141,7 +158,7 @@ export default {
             // 遍历field_id_2_user表/featureLayer中对应的记录
             for (let user of that.selectedUserFeatures) {
               if (user.features.length === 0) { // 如果此field_id没有对应的记录，则为新增
-                let param = that.addFeatureParam(user.fieldId, user.geometry, formUserName)
+                let param = that.addFeatureParam(user.fieldId, user.geometry)
                 addFeatures.push(param)
               } else { // 否则为编辑
                 let param = that.editFeatureParam(user.features[0], user.geometry, formUserName)
@@ -173,11 +190,14 @@ export default {
         })()
       }
     },
-    addFeatureParam (fieldId, geometry, formUserName) {
+    addFeatureParam (fieldId, geometry) {
       const { ESRI } = this.$store.state.nutrition
+      const {user_name: userName, cn_name: cnName} = this.user
       let attributes = {}
+      debugger
       attributes['field_id'] = fieldId
-      attributes['user_name'] = formUserName
+      attributes['user_name'] = userName
+      attributes['cn_name'] = cnName
 
       // 存储几何信息
       return new ESRI.Graphic({
@@ -234,9 +254,6 @@ export default {
     },
     selected (point) {
       this.finishDraw(point)
-    },
-    getUsername () {
-      return window.localStorage.getItem('username')
     }
   }
 }

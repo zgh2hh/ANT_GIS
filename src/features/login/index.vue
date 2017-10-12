@@ -32,8 +32,8 @@
         isCode: false,
         isLogin: false,
         form: {
-          username: '',
-          code: ''
+          username: '18130321306',
+          code: '915649'
         },
         rules: {
           username: [
@@ -52,10 +52,11 @@
         this.checkCaptcha(this.form).then(() => {
           this.isLogin = false
           this.$router.push({name: 'main'})
-          window.localStorage.setItem('username', this.$store.state.common.user.user_name)
+          let user = JSON.stringify(this.$store.state.common.user)
+          window.localStorage.setItem('user', user)
         }).catch(() => {
           this.isLogin = false
-          window.localStorage.setItem('username', '')
+          window.localStorage.setItem('user', null)
         })
       },
       _getCode () {

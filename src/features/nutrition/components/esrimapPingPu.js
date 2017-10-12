@@ -106,7 +106,7 @@ export const createMap = function (loader, callback) {
               }, {// 折腾好久，艹
                 fieldName: 'relationships/0/user_name',
                 visible: true,
-                label: '所属大户',
+                label: '电话',
                 statisticType: 'min'
               }]
             }

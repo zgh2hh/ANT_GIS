@@ -6,7 +6,7 @@
 export default {
   mounted () {
     // 没登录自动调回登录页面
-    if (!window.localStorage.getItem('username')) {
+    if (!window.localStorage.getItem('user')) {
       this.$router.push({name: 'login'})
     }
   }

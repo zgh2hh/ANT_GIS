@@ -108,7 +108,7 @@ export default {
     quit (evt) {
       evt.stopPropagation()
       this.quitLogin().then(() => {
-        window.localStorage.removeItem('username')
+        window.localStorage.removeItem('user')
         this.$router.push({name: 'login'})
       })
     }
@@ -130,7 +130,7 @@ export default {
         })
         that.saveEsri()
       }, {
-        url: 'https://js.arcgis.com/4.4/'
+        url: 'https://js.arcgis.com/4.5/'
         // url: 'http://localhost:8080/arcgis_js_api44/library/4.4/'
       })
     } else {
@@ -151,7 +151,7 @@ export default {
 }
 </script>
 <style scoped>
-@import url('https://js.arcgis.com/4.4/esri/themes/light/main.css');
+@import url('https://js.arcgis.com/4.5/esri/themes/light/main.css');
 /*@import url('http://localhost:8080/arcgis_js_api44/library/4.4/esri/themes/light/main.css');*/
 .nav.is-default {
   background-color: #f5f5f5;
