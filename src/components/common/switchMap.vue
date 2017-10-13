@@ -1,7 +1,7 @@
 <template>
   <div class="esri-widget esri-widget--panel">
     <div class="box">
-      <div class="item">作物分类</div>
+      <div class="item" @click.stop="toggleTopicMap('crops')">作物分类</div>
       <div class="item">土壤养分</div>
       <div class="item">病虫害</div>
       <div class="item">长势</div>
@@ -23,6 +23,18 @@ export default {
   },
   data () {
     return {
+    }
+  },
+  methods: {
+    toggleTopicMap (type) {
+      switch (type) {
+        case 'crops':
+          console.log('crops')
+          this.$store.commit('TOGGLE_TOPIC_MAP', {topicMap: type})
+          break
+        default:
+          console.log('default')
+      }
     }
   }
 }

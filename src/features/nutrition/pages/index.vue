@@ -45,6 +45,7 @@
     <Edit :show='showEdit' :field='field'></Edit>
     <Claim :show='showClaim'></Claim>
     <switch-map ref='switchMap'></switch-map>
+    <Crops></Crops>
   </div>
 </template>
 
@@ -54,10 +55,11 @@ import { createMap } from '../components/esrimapPingPu'
 import { mapActions, mapGetters } from 'vuex'
 import Edit from './edit'
 import Claim from './claim'
-import switchMap from '../../../components/common/switchMap'
+import SwitchMap from '@/components/common/switchMap'
+import Crops from '../../crop/pages/crops'
 export default {
   components: {
-    Edit, Claim, switchMap
+    Edit, Claim, SwitchMap, Crops
   },
   data () {
     return {
