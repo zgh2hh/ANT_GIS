@@ -93,7 +93,7 @@ export default {
     },
     save (evt) {
       evt.stopPropagation()
-      const { map, current, ESRI } = this.$store.state.nutrition
+      const { map, current, ESRI } = this.$store.state.index
       let that = this
       // let featureLyr = map.findLayerById('n') || map.findLayerById('p') || map.findLayerById('k')
       let featureLyr = map.findLayerById(current.toLocaleLowerCase())

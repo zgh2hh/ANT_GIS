@@ -22,7 +22,7 @@ export default {
   },
   watch: {
     active: function (val, oldVal) {
-      const { ESRI } = this.$store.state.nutrition
+      const { ESRI } = this.$store.state.index
       if (ESRI === null) {
         return
       }
@@ -64,7 +64,7 @@ export default {
      * given polygon to the view.
      */
     redrawPolygon (polygon, finished) {
-      const { view, ESRI } = this.$store.state.nutrition
+      const { view, ESRI } = this.$store.state.index
       // simplify the geometry so it can be drawn accross
       // the dateline and accepted as input to other services
       var geometry = finished ? ESRI.geometryEngine.simplify(polygon) : polygon
@@ -95,7 +95,7 @@ export default {
      */
     clearPolygon () {
       let that = this
-      const { view } = this.$store.state.nutrition
+      const { view } = this.$store.state.index
       var polygonGraphic = view.graphics.find(function (graphic) {
         // return graphic.geometry.type === 'polygon'
         return graphic.attributes.id === that.graphicId
@@ -110,7 +110,7 @@ export default {
      *
      */
     clearAllPolygons () {
-      const { view } = this.$store.state.nutrition
+      const { view } = this.$store.state.index
       let result = []
       view.graphics.forEach((graphic) => {
         result.push(graphic)
@@ -125,7 +125,7 @@ export default {
      * view listen for user interaction so drawing can commence.
      */
     activateDraw () {
-      const { view } = this.$store.state.nutrition
+      const { view } = this.$store.state.index
       let that = this
       this.drawConfig.isDrawActive = true
       // drawButton.classList.toggle("esri-draw-button-selected");
@@ -183,7 +183,7 @@ export default {
     // Converts screen coordinates returned
     // from an event to an instance of esri/geometry/Point
     createPoint (event) {
-      const { view } = this.$store.state.nutrition
+      const { view } = this.$store.state.index
       return view.toMap(event)
     },
     /**
@@ -194,7 +194,7 @@ export default {
      * @return {esri/geometry/Polygon}
      */
     addVertex (point, isFinal) {
-      const { ESRI } = this.$store.state.nutrition
+      const { ESRI } = this.$store.state.index
       var polygon = this.drawConfig.activePolygon
       var ringLength
 

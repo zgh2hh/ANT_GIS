@@ -56,7 +56,7 @@ export const classify = ({commit, state}, parmas) => {
   })
 }
 
-/** 地图分类分级渲染 */
+/** 保存ESRI类 */
 export const saveEsri = ({commit, state}, parmas) => {
   return new Promise((resolve, reject) => {
     loadEsri((ESRI) => {

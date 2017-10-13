@@ -5,6 +5,9 @@
 <script>
 import store from '@/store'
 import modules from '../modules/store'
+import { mapActions } from 'vuex'
+// import { CROPS_GRADE_CONFIG } from '../components/gradeConfig'
+
 // 注册crops的modules
 if (!store.state.crops) {
   store.registerModule('crops', {
@@ -35,8 +38,21 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['gradeCrops']),
     classifyCrops () {
       console.log('-------------------分级作物成功------------------------')
+      this.gradeCrops()
+    },
+    createSimpleFill () {
+      const {ESRI} = this.$store.state.index
+      return new ESRI.SimpleFillSymbol({
+        color: '#E6B8DF',
+        style: 'solid',
+        outline: {
+          width: 0.5,
+          color: 'white'
+        }
+      })
     }
   },
   mounted () {
@@ -46,7 +62,7 @@ export default {
     // 监控传入的topicMap值
     'topicMap': function (val, oldVal) {
       if (val === 'crops') {
-        // 分级
+        // 分级作物
         this.classifyCrops()
       }
     }

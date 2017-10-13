@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { sync } from 'vuex-router-sync'
 import store from './store'
-import main from '@/router/index.vue'
-import nutrition from '@/features/nutrition/router'
+import root from '@/router/index.vue'
+import index from '@/features/index/router'
 import login from '@/features/login/index'
 
 Vue.use(Router)
@@ -11,11 +11,11 @@ let router = new Router({
   routes: [
     {
       path: '/',
-      name: 'main',
-      component: main,
-      redirect: '/nutrition',
+      name: 'root',
+      component: root,
+      redirect: '/index',
       children: [
-        nutrition
+        index
       ]
     },
     {

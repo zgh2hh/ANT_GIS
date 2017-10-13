@@ -132,7 +132,7 @@ export default {
     saveFeaturesByDraw () {
       this.$store.commit(types.CLEAR_SELECTED_RECORDS)
       let formUserName = this.$refs.userName.value.trim() || ''
-      const { map } = this.$store.state.nutrition
+      const { map } = this.$store.state.index
       let that = this
       let featureLyr = map.findLayerById('draw')
       let fieldId2Username = map.findLayerById('id2username')
@@ -191,7 +191,7 @@ export default {
       }
     },
     addFeatureParam (fieldId, geometry) {
-      const { ESRI } = this.$store.state.nutrition
+      const { ESRI } = this.$store.state.index
       const {user_name: userName, cn_name: cnName} = this.user
       let attributes = {}
       debugger
@@ -230,13 +230,13 @@ export default {
       this.geometries.push(geometry)
       // this.startSelect = false
       this.startDraw = false
-      const { ESRI } = this.$store.state.nutrition
+      const { ESRI } = this.$store.state.index
       this.geometry = ESRI.geometryEngine.union(this.geometries)
       this.hightLight()
     },
     hightLight () {
       let that = this
-      const { map } = this.$store.state.nutrition
+      const { map } = this.$store.state.index
       let featureLyr = map.findLayerById('draw')
       // 根据所绘制田块，查询出对应的所有田块
       this.queryFieldsByGeometry({

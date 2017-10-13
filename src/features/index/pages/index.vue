@@ -45,7 +45,7 @@
     <Edit :show='showEdit' :field='field'></Edit>
     <Claim :show='showClaim'></Claim>
     <switch-map ref='switchMap'></switch-map>
-    <Crops></Crops>
+    <Crops :topicMap='$store.state.crops.gradeTopicMap'></Crops>
   </div>
 </template>
 
@@ -88,7 +88,7 @@ export default {
       })
     },
     _toggleLayer (type) {
-      const {map} = this.$store.state.nutrition
+      const {map} = this.$store.state.index
       let image = map.findLayerById('image')
       if (this.checked) {
         image.allSublayers.forEach((lyr, i) => {
@@ -133,7 +133,7 @@ export default {
           })
         })
         that.saveEsri().then((ESRI) => {
-          let view = that.$store.state.nutrition.view
+          let view = that.$store.state.index.view
           const topicMapExpand = new ESRI.Expand({
             view: view,
             content: that.$refs['switchMap'].$el,
@@ -154,7 +154,7 @@ export default {
           query
         })
         that.saveEsri().then((ESRI) => {
-          let view = that.$store.state.nutrition.view
+          let view = that.$store.state.index.view
           const topicMapExpand = new ESRI.Expand({
             view: view,
             content: that.$refs['switchMap'].$el,

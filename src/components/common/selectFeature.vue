@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     activateSelect () {
-      const { view } = this.$store.state.nutrition
+      const { view } = this.$store.state.index
       let that = this
       // prevents the popup from unecessarily closing
       // after drawing has completed
@@ -51,7 +51,7 @@ export default {
       this.$emit('deactivated')
     },
     createPoint (event) {
-      const { view } = this.$store.state.nutrition
+      const { view } = this.$store.state.index
       return view.toMap(event)
     }
   }

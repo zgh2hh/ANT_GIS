@@ -25,7 +25,7 @@ export default {
   methods: {
     hightLight () {
       let features = this.resultFeatures
-      const { ESRI, view } = this.$store.state.nutrition
+      const { ESRI, view } = this.$store.state.index
       features.forEach((feature) => {
         let polygon = new ESRI.Polygon(feature.geometry)
         let polygonGraphic = new ESRI.Graphic({
@@ -49,7 +49,7 @@ export default {
      *
      */
     clearAllPolygons () {
-      const { view } = this.$store.state.nutrition
+      const { view } = this.$store.state.index
       let result = []
       view.graphics.forEach((graphic) => {
         result.push(graphic)

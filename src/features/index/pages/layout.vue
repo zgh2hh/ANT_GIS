@@ -9,8 +9,8 @@ import {mapGetters} from 'vuex'
 import store from '@/store'
 import modules from '../modules/store'
 
-if (!store.state.nutrition) {
-  store.registerModule('nutrition', {
+if (!store.state.index) {
+  store.registerModule('index', {
     ...modules
   })
 }
