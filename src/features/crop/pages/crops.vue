@@ -6,7 +6,7 @@
 import store from '@/store'
 import modules from '../modules/store'
 import { mapActions } from 'vuex'
-// import { CROPS_GRADE_CONFIG } from '../components/gradeConfig'
+import { CROPS_GRADE_CONFIG } from '../components/gradeConfig'
 
 // 注册crops的modules
 if (!store.state.crops) {
@@ -40,13 +40,66 @@ export default {
   methods: {
     ...mapActions(['gradeCrops']),
     classifyCrops () {
-      console.log('-------------------分级作物成功------------------------')
-      this.gradeCrops()
+      let cropsLayer = this.initLayer()
+      this.gradeCrops({
+        layer: cropsLayer
+      })
     },
-    createSimpleFill () {
+    initLayer () {
+      const { ESRI } = this.$store.state.index
+      const config = CROPS_GRADE_CONFIG
+      let renderer = this.createRender()
+      return new ESRI.FeatureLayer({
+        id: config.id,
+        url: 'https://60.169.69.3:6443/arcgis/rest/services/FeatureService/FeatureService/FeatureServer/2',
+        renderer: renderer,
+        outFields: ['*'],
+        popupTemplate: { // autocast as esri/PopupTemplate
+          title: '{' + config.fieldName + '}',
+          content: '{' + config.fieldName + '} 平均含' + config.cnName + '/' + config.name + '量 ' +
+          '{' + config.calcuField + '} '
+        },
+        title: '作物分类'
+      })
+    },
+    createRender () {
+      const { ESRI } = this.$store.state.index
+      const config = CROPS_GRADE_CONFIG
+      let that = this
+
+      return new ESRI.ClassBreaksRenderer({
+        field: config.calcuField,
+        defaultSymbol: new ESRI.SimpleFillSymbol({
+          color: 'gray',
+          outline: {
+            width: 0.5,
+            color: 'white'
+          }
+        }),
+        defaultLabel: 'no data',
+        classBreakInfos: [
+          {
+            minValue: config.classBreak[0].min,
+            maxValue: config.classBreak[0].max,
+            symbol: that.createSimpleFill(config.classBreak[0].color),
+            label: config.classBreak[0].label
+          }, {
+            minValue: config.classBreak[1].min,
+            maxValue: config.classBreak[1].max,
+            symbol: that.createSimpleFill(config.classBreak[1].color),
+            label: config.classBreak[1].label
+          }, {
+            minValue: config.classBreak[2].min,
+            maxValue: config.classBreak[2].max,
+            symbol: that.createSimpleFill(config.classBreak[2].color),
+            label: config.classBreak[2].label
+          }]
+      })
+    },
+    createSimpleFill (color = 'gray') {
       const {ESRI} = this.$store.state.index
       return new ESRI.SimpleFillSymbol({
-        color: '#E6B8DF',
+        color: color,
         style: 'solid',
         outline: {
           width: 0.5,

@@ -194,7 +194,6 @@ export default {
       const { ESRI } = this.$store.state.index
       const {user_name: userName, cn_name: cnName} = this.user
       let attributes = {}
-      debugger
       attributes['field_id'] = fieldId
       attributes['user_name'] = userName
       attributes['cn_name'] = cnName
