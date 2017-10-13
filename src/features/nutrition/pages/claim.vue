@@ -74,9 +74,9 @@
 <script>
 import * as types from '../modules/mutationTypes'
 import { mapActions, mapGetters } from 'vuex'
-import Draw from './draw'
-import highLight from '../../../components/common/highLight'
-import selectFeature from '../../../components/common/selectFeature'
+import Draw from '@/components/common/draw'
+import highLight from '@/components/common/highLight'
+import selectFeature from '@/components/common/selectFeature'
 export default {
   components: {
     Draw,

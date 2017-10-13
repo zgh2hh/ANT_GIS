@@ -49,7 +49,7 @@
 
 <script>
 import * as types from '../modules/mutationTypes'
-import Draw from './draw'
+import Draw from '@/components/common/draw'
 export default {
   components: {
     Draw

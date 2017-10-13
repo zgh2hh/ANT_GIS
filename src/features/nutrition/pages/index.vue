@@ -135,7 +135,7 @@ export default {
           const topicMapExpand = new ESRI.Expand({
             view: view,
             content: that.$refs['switchMap'].$el,
-            expandIconClass: 'esri-icon-collection',
+            expandIconClass: 'esri-icon-basemap',
             expandTooltip: '专题图'
           })
           view.ui.add(topicMapExpand, 'top-right')

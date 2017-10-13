@@ -28,7 +28,7 @@ export default {
 }
 </script>
 
-<style scoped type='less'>
+<style scoped>
 .box .item{
   display: inline-block;
   width: 5.2rem;
