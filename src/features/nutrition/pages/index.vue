@@ -44,6 +44,7 @@
     <div id="viewDiv" class="balt-theme"></div>
     <Edit :show='showEdit' :field='field'></Edit>
     <Claim :show='showClaim'></Claim>
+    <switch-map ref='switchMap'></switch-map>
   </div>
 </template>
 
@@ -53,9 +54,10 @@ import { createMap } from '../components/esrimapPingPu'
 import { mapActions, mapGetters } from 'vuex'
 import Edit from './edit'
 import Claim from './claim'
+import switchMap from '../../../components/common/switchMap'
 export default {
   components: {
-    Edit, Claim
+    Edit, Claim, switchMap
   },
   data () {
     return {
@@ -113,7 +115,7 @@ export default {
       })
     }
   },
-  mounted () {
+  created () {
     let that = this
 
     if (!esriLoader.isLoaded()) {
@@ -128,7 +130,16 @@ export default {
             query: query
           })
         })
-        that.saveEsri()
+        that.saveEsri().then((ESRI) => {
+          let view = that.$store.state.nutrition.view
+          const topicMapExpand = new ESRI.Expand({
+            view: view,
+            content: that.$refs['switchMap'].$el,
+            expandIconClass: 'esri-icon-collection',
+            expandTooltip: '专题图'
+          })
+          view.ui.add(topicMapExpand, 'top-right')
+        })
       }, {
         url: 'https://js.arcgis.com/4.5/'
         // url: 'http://localhost:8080/arcgis_js_api44/library/4.4/'
@@ -140,7 +151,16 @@ export default {
           view: view,
           query
         })
-        that.saveEsri()
+        that.saveEsri().then((ESRI) => {
+          let view = that.$store.state.nutrition.view
+          const topicMapExpand = new ESRI.Expand({
+            view: view,
+            content: that.$refs['switchMap'].$el,
+            expandIconClass: 'esri-icon-collection',
+            expandTooltip: '专题图'
+          })
+          view.ui.add(topicMapExpand, 'top-right')
+        })
       })
     }
 

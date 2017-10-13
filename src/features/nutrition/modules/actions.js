@@ -61,6 +61,7 @@ export const saveEsri = ({commit, state}, parmas) => {
   return new Promise((resolve, reject) => {
     loadEsri((ESRI) => {
       commit(types.SAVE_ESRI_CLASS, ESRI)
+      resolve(ESRI)
     })
   })
 }

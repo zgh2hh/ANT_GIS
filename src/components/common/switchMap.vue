@@ -1,0 +1,45 @@
+<template>
+  <div class="esri-widget esri-widget--panel">
+    <div class="box">
+      <div class="item">作物分类</div>
+      <div class="item">土壤养分</div>
+      <div class="item">病虫害</div>
+      <div class="item">长势</div>
+      <div class="item">单产估算</div>
+      <div class="item">成熟期预测</div>
+      <div class="item">旱情</div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'switchMap',
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+    }
+  }
+}
+</script>
+
+<style scoped type='less'>
+.box .item{
+  display: inline-block;
+  width: 5.2rem;
+  height: 2rem;
+  margin-bottom: 3px;
+  line-height: 2rem;
+  border: 1px solid #3e3e3e;
+  background: #f2f2f2;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+</style>
