@@ -80,7 +80,7 @@ export default {
     ])
   },
   methods: {
-    ...mapActions(['saveEsri', 'quitLogin', 'queryClaimedFields']),
+    ...mapActions(['saveEsri', 'quitLogin', 'queryClaimedFields', 'displayMode']),
     _change (value) {
       this.$store.commit('GET_CURRENT_DIST', {current: value})
       this.selected = value
@@ -119,14 +119,23 @@ export default {
       })
     },
     async changeMode (mode) {
+      const {map} = this.$store.state.index
+      let draw = map.findLayerById('draw')
       if (mode === '大户模式') {
-        const {map} = this.$store.state.index
-        let draw = map.findLayerById('id2username')
+        let id2username = map.findLayerById('id2username')
         await this.queryClaimedFields({
-          featureLyr: draw
+          featureLyr: id2username
         })
-        console.log(this.climedFieldsIds)
-        debugger
+        await this.displayMode({
+          fieldIds: this.climedFieldsIds,
+          layer: draw,
+          type: '大户模式'
+        })
+      } else {
+        await this.displayMode({
+          layer: draw,
+          type: '地区模式'
+        })
       }
     }
   },
