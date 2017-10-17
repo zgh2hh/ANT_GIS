@@ -52,6 +52,7 @@ export default {
       return new ESRI.FeatureLayer({
         id: config.id,
         url: 'https://60.169.69.3:6443/arcgis/rest/services/FeatureService/FeatureService/FeatureServer/2',
+        // definitionExpression: 'field_id = 11349',
         renderer: renderer,
         outFields: ['*'],
         popupTemplate: {

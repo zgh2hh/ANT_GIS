@@ -73,3 +73,21 @@ export const quitLogin = ({ commit }, params) => {
     })
   })
 }
+
+/** 获取所有已认领田块 */
+export const queryClaimedFields = ({commit, state}, parmas) => {
+  let {featureLyr} = parmas
+  let query = featureLyr.createQuery()
+  query.where = '1 = 1'
+  query.outFields = ['*']
+  return new Promise((resolve, reject) => {
+    featureLyr.queryFeatures(query).then((results) => {
+      commit(types.GET_CLAIMED_FIELDS, {
+        'claimedFields': results.features
+      })
+      resolve(results)
+    }, (err) => {
+      reject(err)
+    })
+  })
+}

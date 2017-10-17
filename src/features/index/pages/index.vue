@@ -41,6 +41,7 @@
         </div>
       </div>
     </nav>
+    <common-header v-on:modeChange='changeMode'></common-header>
     <div id="viewDiv" class="balt-theme"></div>
     <Edit :show='showEdit' :field='field'></Edit>
     <Claim :show='showClaim'></Claim>
@@ -53,13 +54,14 @@
 import * as esriLoader from 'esri-loader'
 import { createMap } from '../components/esrimapPingPu'
 import { mapActions, mapGetters } from 'vuex'
+import CommonHeader from '@/components/common/header'
 import Edit from './edit'
 import Claim from './claim'
 import SwitchMap from '@/components/common/switchMap'
 import Crops from '../../crop/pages/crops'
 export default {
   components: {
-    Edit, Claim, SwitchMap, Crops
+    Edit, Claim, SwitchMap, Crops, CommonHeader
   },
   data () {
     return {
@@ -74,11 +76,11 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'showEdit', 'showClaim', 'field'
+      'showEdit', 'showClaim', 'field', 'climedFieldsIds'
     ])
   },
   methods: {
-    ...mapActions(['saveEsri', 'quitLogin']),
+    ...mapActions(['saveEsri', 'quitLogin', 'queryClaimedFields']),
     _change (value) {
       this.$store.commit('GET_CURRENT_DIST', {current: value})
       this.selected = value
@@ -115,6 +117,17 @@ export default {
         window.localStorage.removeItem('user')
         this.$router.push({name: 'login'})
       })
+    },
+    async changeMode (mode) {
+      if (mode === '大户模式') {
+        const {map} = this.$store.state.index
+        let draw = map.findLayerById('id2username')
+        await this.queryClaimedFields({
+          featureLyr: draw
+        })
+        console.log(this.climedFieldsIds)
+        debugger
+      }
     }
   },
   created () {

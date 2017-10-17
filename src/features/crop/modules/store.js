@@ -3,6 +3,7 @@ import * as actions from './actions'
 import * as getters from './getters'
 
 const state = {
+  // 分级专题图
   gradeTopicMap: ''
 }
 

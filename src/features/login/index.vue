@@ -33,7 +33,7 @@
         isLogin: false,
         form: {
           username: '18130321306',
-          code: '915649'
+          code: '915718'
         },
         rules: {
           username: [

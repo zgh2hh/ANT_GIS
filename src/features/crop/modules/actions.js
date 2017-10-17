@@ -14,6 +14,8 @@ export const gradeCrops = ({commit, state, rootState}, parmas) => {
     // 移除legend
     view.ui.empty('bottom-left')
     let {layer} = parmas
+    layer.definitionExpression = 'field_id in (11349, 11285, 11292, 11262, 11267)'
+    // layer.definitionExpression = 'EXISTS (select 1 from field_id_2_user b where draw.field_id = b.field_id and b.user_name = "18130321306")'
     // 添加新图层
     map.add(layer)
 

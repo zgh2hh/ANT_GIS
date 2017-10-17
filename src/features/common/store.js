@@ -4,7 +4,9 @@ import * as actions from './actions'
 const state = {
   user: {},
   allLayers: [],
-  selectedLayers: []
+  selectedLayers: [],
+  // 所有已认领田块id集合
+  claimedFields: []
 }
 
 const getters = {
@@ -13,7 +15,17 @@ const getters = {
   },
   User: state => state.user,
   getAllLayers: state => state.allLayers,
-  getSelectedLayers: state => state.selectedLayers
+  getSelectedLayers: state => state.selectedLayers,
+  climedFieldsIds: state => {
+    let {claimedFields} = state
+    if (typeof claimedFields === 'object' && claimedFields.length > 0) {
+      return claimedFields.map((item) => {
+        return item.attributes.field_id
+      })
+    } else {
+      return []
+    }
+  }
 }
 
 const mutations = {
@@ -54,6 +66,9 @@ const mutations = {
   },
   [types.CHECK_CODE] (state, data) {
     state.user = data
+  },
+  [types.GET_CLAIMED_FIELDS] (state, data) {
+    state.claimedFields = [...data.claimedFields]
   }
 }
 
