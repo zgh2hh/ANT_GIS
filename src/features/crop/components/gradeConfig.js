@@ -8,12 +8,12 @@ const CROPS_GRADE_CONFIG = {
     min: 1,
     max: 1,
     label: '水稻',
-    color: '#E6B8DF'
+    color: '#0C8918'
   }, {
     min: 2,
     max: 2,
     label: '小麦',
-    color: '#EB8DC7'
+    color: '#d9b611'
   }, {
     min: 3,
     max: 3,

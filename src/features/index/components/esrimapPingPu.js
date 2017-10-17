@@ -65,7 +65,7 @@ export const createMap = function (loader, callback) {
             title: '氮(N)分布'
           }, {
             id: 2,
-            visible: true,
+            visible: false,
             title: '卫星图'
           }, {
             id: 1,

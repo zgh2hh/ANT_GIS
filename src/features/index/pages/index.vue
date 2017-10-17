@@ -78,7 +78,7 @@ export default {
     ])
   },
   methods: {
-    ...mapActions(['classify', 'saveEsri', 'quitLogin']),
+    ...mapActions(['saveEsri', 'quitLogin']),
     _change (value) {
       this.$store.commit('GET_CURRENT_DIST', {current: value})
       this.selected = value
@@ -165,10 +165,6 @@ export default {
         })
       })
     }
-
-    this.classify({
-      tp: that.selected
-    })
   }
 }
 </script>

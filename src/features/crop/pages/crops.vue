@@ -54,10 +54,37 @@ export default {
         url: 'https://60.169.69.3:6443/arcgis/rest/services/FeatureService/FeatureService/FeatureServer/2',
         renderer: renderer,
         outFields: ['*'],
-        popupTemplate: { // autocast as esri/PopupTemplate
-          title: '{' + config.fieldName + '}',
-          content: '{' + config.fieldName + '} 平均含' + config.cnName + '/' + config.name + '量 ' +
-          '{' + config.calcuField + '} '
+        popupTemplate: {
+          title: '<font color="#008000">田块详情',
+          content: [
+            {
+              type: 'fields',
+              fieldInfos: [{
+                fieldName: 'field_name',
+                visible: true,
+                label: '田块名称'
+              }, {// 折腾好久，艹
+                fieldName: 'relationships/0/cn_name',
+                visible: true,
+                label: '大户',
+                statisticType: 'min'
+              }, {// 折腾好久，艹
+                fieldName: 'relationships/0/user_name',
+                visible: true,
+                label: '电话',
+                statisticType: 'min'
+              }, {
+                fieldName: 'area_size',
+                visible: true,
+                label: '田块面积'
+              }, {// 折腾好久，艹
+                fieldName: 'relationships/1/crop_name',
+                visible: true,
+                label: '当前种植作物',
+                statisticType: 'min'
+              }]
+            }
+          ]
         },
         title: '作物分类'
       })
