@@ -8,7 +8,7 @@
           {{username}}
         </span>
       </el-dropdown>
-      <span class="button quit" @click.native='quit'>退出登录</span>
+      <span class="button quit" @click='_loginout'>退出登录</span>
     </div>
     <div>
       <el-radio-group v-model="mode">

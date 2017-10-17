@@ -6,7 +6,9 @@ const state = {
   allLayers: [],
   selectedLayers: [],
   // 所有已认领田块id集合
-  claimedFields: []
+  claimedFields: [],
+  // 显示模式
+  mode: '地区模式'
 }
 
 const getters = {
@@ -69,6 +71,9 @@ const mutations = {
   },
   [types.GET_CLAIMED_FIELDS] (state, data) {
     state.claimedFields = [...data.claimedFields]
+  },
+  [types.TOGGLE_MODE] (state, data) {
+    state.mode = data.mode
   }
 }
 

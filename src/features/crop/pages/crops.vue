@@ -40,54 +40,11 @@ export default {
   methods: {
     ...mapActions(['gradeCrops']),
     classifyCrops () {
-      let cropsLayer = this.initLayer()
+      const { map } = this.$store.state.index
+      let draw = map.findLayerById('draw')
       this.gradeCrops({
-        layer: cropsLayer
-      })
-    },
-    initLayer () {
-      const { ESRI } = this.$store.state.index
-      const config = CROPS_GRADE_CONFIG
-      let renderer = this.createRender()
-      return new ESRI.FeatureLayer({
-        id: config.id,
-        url: 'https://60.169.69.3:6443/arcgis/rest/services/FeatureService/FeatureService/FeatureServer/2',
-        // definitionExpression: 'field_id = 11349',
-        renderer: renderer,
-        outFields: ['*'],
-        popupTemplate: {
-          title: '<font color="#008000">田块详情',
-          content: [
-            {
-              type: 'fields',
-              fieldInfos: [{
-                fieldName: 'field_name',
-                visible: true,
-                label: '田块名称'
-              }, {// 折腾好久，艹
-                fieldName: 'relationships/0/cn_name',
-                visible: true,
-                label: '大户',
-                statisticType: 'min'
-              }, {// 折腾好久，艹
-                fieldName: 'relationships/0/user_name',
-                visible: true,
-                label: '电话',
-                statisticType: 'min'
-              }, {
-                fieldName: 'area_size',
-                visible: true,
-                label: '田块面积'
-              }, {// 折腾好久，艹
-                fieldName: 'relationships/1/crop_name',
-                visible: true,
-                label: '当前种植作物',
-                statisticType: 'min'
-              }]
-            }
-          ]
-        },
-        title: '作物分类'
+        layer: draw,
+        render: this.createRender()
       })
     },
     createRender () {

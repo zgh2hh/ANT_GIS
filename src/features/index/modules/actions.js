@@ -84,21 +84,18 @@ export const editFeatures = ({commit, state}, parmas) => {
 /** 大户模式 */
 export const displayMode = ({commit, state, rootState}, parmas) => {
   return new Promise((resolve, reject) => {
-    const {map, view} = rootState.index
-    // 移除已经加载的所有田块
-    let draw = map.findLayerById('draw')
+    // const {view} = rootState.index
     let {fieldIds, layer, type} = parmas
-    // 移除图层
-    draw && map.remove(draw)
-    // 移除legend
-    view.ui.empty('bottom-left')
     if (type === '大户模式') {
       layer.definitionExpression = 'field_id in (' + fieldIds.join() + ')'
+      commit('TOGGLE_MODE', {
+        mode: '大户模式'
+      })
     } else {
       layer.definitionExpression = ''
+      commit('TOGGLE_MODE', {
+        mode: '地区模式'
+      })
     }
-    // layer.definitionExpression = 'EXISTS (select 1 from field_id_2_user b where draw.field_id = b.field_id and b.user_name = "18130321306")'
-    // 添加新图层
-    map.add(layer)
   })
 }
