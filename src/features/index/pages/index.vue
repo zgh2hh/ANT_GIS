@@ -1,46 +1,5 @@
 <template>
   <div>
-    <nav class="nav hero is-default has-shadow">
-      <div class='container'>
-        <div class="nav-left">
-          <router-link to="/" class="nav-item">
-            <img src='../../../assets/CITY-LOGO.png' alt="Vue">
-          </router-link>
-          <div class="field">
-            <p class="control has-icons-left">
-              <span class="select">
-                <select @change="_change($event.target.value)">
-                  <option v-for="option in options" :value="option.value" :key="option.value">
-                    {{option.text}}
-                  </option>
-                </select>
-              </span>
-              <span class="icon is-small is-left">
-                <i class="fa fa-globe"></i>
-              </span>
-            </p>
-          </div>
-          <div class="field">
-            <div class="control">
-              <label class="checkbox">
-                <input type="checkbox" id='showImage' v-model="checked">
-                同时关联专题遥感影像
-              </label>
-            </div>
-          </div>
-          <div class="field">
-            <p class="control">
-              <button class="button is-success" @click="_toggleClaim" :disabled='showClaim'>
-                认领田块
-              </button>
-            </p>
-          </div>
-        </div>
-        <div class='outer-quit'>
-          <button class="button quit" @click='quit'>退出登录</button>
-        </div>
-      </div>
-    </nav>
     <common-header v-on:modeChange='changeMode'></common-header>
     <div id="viewDiv" class="balt-theme"></div>
     <Edit :show='showEdit' :field='field'></Edit>
@@ -49,6 +8,48 @@
     <Crops :topicMap='$store.state.crops.gradeTopicMap'></Crops>
   </div>
 </template>
+
+// <nav class="nav hero is-default has-shadow">
+//       <div class='container'>
+//         <div class="nav-left">
+//           <router-link to="/" class="nav-item">
+//             <img src='../../../assets/CITY-LOGO.png' alt="Vue">
+//           </router-link>
+//           <div class="field">
+//             <p class="control has-icons-left">
+//               <span class="select">
+//                 <select @change="_change($event.target.value)">
+//                   <option v-for="option in options" :value="option.value" :key="option.value">
+//                     {{option.text}}
+//                   </option>
+//                 </select>
+//               </span>
+//               <span class="icon is-small is-left">
+//                 <i class="fa fa-globe"></i>
+//               </span>
+//             </p>
+//           </div>
+//           <div class="field">
+//             <div class="control">
+//               <label class="checkbox">
+//                 <input type="checkbox" id='showImage' v-model="checked">
+//                 同时关联专题遥感影像
+//               </label>
+//             </div>
+//           </div>
+//           <div class="field">
+//             <p class="control">
+//               <button class="button is-success" @click="_toggleClaim" :disabled='showClaim'>
+//                 认领田块
+//               </button>
+//             </p>
+//           </div>
+//         </div>
+//         <div class='outer-quit'>
+//           <button class="button quit" @click='quit'>退出登录</button>
+//         </div>
+//       </div>
+//     </nav>
 
 <script>
 import * as esriLoader from 'esri-loader'
