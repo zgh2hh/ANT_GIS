@@ -2,12 +2,10 @@
   <div class='header'>
     <div class='logo'>农情遥感监测平台</div>
     <div class='user-info'>
-      <el-dropdown trigger='click'>
-        <span class='el-dropdown-link'>
-          <img class='user-logo' src='http://o9s1f7266.bkt.clouddn.com/06bOOOPIC32_202.jpg' width='100' height='100'>
-          {{username}}
-        </span>
-      </el-dropdown>
+      <span class='el-dropdown-link'>
+        <img class='user-logo' src='http://o9s1f7266.bkt.clouddn.com/06bOOOPIC32_202.jpg' width='100' height='100'>
+        {{username}}
+      </span>
       <span class="button quit" @click='_loginout'>退出登录</span>
     </div>
     <div>
@@ -30,7 +28,9 @@ export default {
   computed: {
     ...mapGetters(['User']),
     username () {
-      return localStorage.getItem('ms_username') || this.User.cn_name
+      let user = window.localStorage.getItem('user')
+      let userObj = JSON.parse(user)
+      return userObj.cn_name
     }
   },
   methods: {
@@ -89,5 +89,9 @@ export default {
   width:40px;
   height:40px;
   border-radius: 50%;
+}
+.user-info .quit{
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>
