@@ -27,13 +27,7 @@ export default {
   },
   methods: {
     toggleTopicMap (type) {
-      switch (type) {
-        case 'crops':
-          this.$store.commit('TOGGLE_TOPIC_MAP', {topicMap: type})
-          break
-        default:
-          console.log('default')
-      }
+      this.$store.commit('TOGGLE_TOPIC_MAP', {topicMap: type})
     }
   }
 }

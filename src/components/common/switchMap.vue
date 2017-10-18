@@ -1,9 +1,9 @@
 <template>
   <div class="esri-widget esri-widget--panel">
     <div class="box">
-      <div class="item" @click="toggleMap(type.gradeByFields)">按田块分级统计图</div>
-      <div class="item" @click="toggleMap(type.rs)">原始遥感监测图</div>
-      <div class="item" @click="toggleMap(type.grade)">分级统计图</div>
+      <div class="item" @click="toggleMap(type.gradeMap)">分级统计图</div>
+      <div class="item" @click="toggleMap(type.fieldGradeMap)">按田块分级统计图</div>
+      <div class="item" @click="toggleMap(type.rsMap)">原始遥感监测图</div>
     </div>
   </div>
 </template>
@@ -20,27 +20,15 @@ export default {
   data () {
     return {
       type: {
-        gradeByFields: 'gradeByFields',
-        rs: 'rs',
-        grade: 'grade'
+        fieldGradeMap: 'fieldGradeMap',
+        rsMap: 'rsMap',
+        gradeMap: 'gradeMap'
       }
     }
   },
   methods: {
     toggleMap (type) {
-      switch (type) {
-        case 'gradeByFields':
-          this.$store.commit('TOGGLE_TOPIC_MAP', {topicMap: type})
-          break
-        case 'rs':
-          this.$store.commit('TOGGLE_TOPIC_MAP', {topicMap: type})
-          break
-        case 'grade':
-          this.$store.commit('TOGGLE_TOPIC_MAP', {topicMap: type})
-          break
-        default:
-          console.log('default')
-      }
+      this.$store.commit('TOGGLE_BASE_MAP', {baseMap: type})
     }
   }
 }
@@ -48,8 +36,6 @@ export default {
 
 <style scoped>
 .box .item{
-  display: inline-block;
-  width: 5.2rem;
   height: 2rem;
   margin-bottom: 3px;
   line-height: 2rem;

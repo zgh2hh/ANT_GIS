@@ -8,7 +8,11 @@ const state = {
   // 所有已认领田块集合
   claimedFields: [],
   // 显示模式
-  mode: '地区模式'
+  mode: '地区模式',
+  // 当前专题图
+  topicMap: '',
+  // 当前底图
+  baseMap: ''
 }
 
 const getters = {
@@ -74,6 +78,12 @@ const mutations = {
   },
   [types.TOGGLE_MODE] (state, data) {
     state.mode = data.mode
+  },
+  [types.TOGGLE_TOPIC_MAP] (state, data) {
+    state.topicMap = data.topicMap
+  },
+  [types.TOGGLE_BASE_MAP] (state, data) {
+    state.baseMap = data.baseMap
   }
 }
 

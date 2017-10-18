@@ -10,3 +10,7 @@ export const CHECK_CODE = 'CHECK_CODE'
 export const GET_CLAIMED_FIELDS = 'GET_CLAIMED_FIELDS'
 /** 保存当前显示模式 */
 export const TOGGLE_MODE = 'TOGGLE_MODE'
+/** 保存当前专题图类型 */
+export const TOGGLE_TOPIC_MAP = 'TOGGLE_TOPIC_MAP'
+/** 保存当前底图 */
+export const TOGGLE_BASE_MAP = 'TOGGLE_BASE_MAP'

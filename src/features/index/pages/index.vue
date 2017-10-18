@@ -5,8 +5,9 @@
     <Edit :show='showEdit' :field='field'></Edit>
     <Claim :show='showClaim'></Claim>
     <topic-map ref='topicMap'></topic-map>
+    <switch-map ref='switchMap'></switch-map>
     <tool ref='tool'></tool>
-    <Crops :topicMap='$store.state.crops.gradeTopicMap'></Crops>
+    <Crops :topicMap='$store.state.common.topicMap' :baseMap='$store.state.common.baseMap'></Crops>
   </div>
 </template>
 
@@ -60,11 +61,12 @@ import CommonHeader from '@/components/common/header'
 import Edit from './edit'
 import Claim from './claim'
 import TopicMap from '@/components/common/topicMap'
+import SwitchMap from '@/components/common/switchMap'
 import tool from '@/components/common/tool'
 import Crops from '../../crop/pages/crops'
 export default {
   components: {
-    Edit, Claim, TopicMap, Crops, CommonHeader, tool
+    Edit, Claim, TopicMap, SwitchMap, Crops, CommonHeader, tool
   },
   data () {
     return {
@@ -159,13 +161,22 @@ export default {
         })
         that.saveEsri().then((ESRI) => {
           let view = that.$store.state.index.view
+          // 遥感专题图
           const topicMapExpand = new ESRI.Expand({
             view: view,
             content: that.$refs['topicMap'].$el,
             expandIconClass: 'esri-icon-basemap',
             expandTooltip: '专题图'
           })
+          // 展示底图
+          const switchMapExpand = new ESRI.Expand({
+            view: view,
+            content: that.$refs['switchMap'].$el,
+            expandIconClass: 'esri-icon-media',
+            expandTooltip: '图像切换'
+          })
           view.ui.add(topicMapExpand, 'top-right')
+          view.ui.add(switchMapExpand, 'top-right')
           view.ui.add(this.$refs['tool'].$el, 'top-left')
         })
       }, {
@@ -181,13 +192,22 @@ export default {
         })
         that.saveEsri().then((ESRI) => {
           let view = that.$store.state.index.view
+          // 遥感专题图
           const topicMapExpand = new ESRI.Expand({
             view: view,
             content: that.$refs['topicMap'].$el,
             expandIconClass: 'esri-icon-collection',
             expandTooltip: '专题图'
           })
+          // 展示底图
+          const switchMapExpand = new ESRI.Expand({
+            view: view,
+            content: that.$refs['switchMap'].$el,
+            expandIconClass: 'esri-icon-media',
+            expandTooltip: '图像切换'
+          })
           view.ui.add(topicMapExpand, 'top-right')
+          view.ui.add(switchMapExpand, 'top-right')
           view.ui.add(this.$refs['tool'].$el, 'top-left')
         })
       })

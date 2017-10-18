@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'switchMap',
+  name: 'tool',
   props: {},
   data () {
     return {
