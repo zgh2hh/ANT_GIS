@@ -13,7 +13,7 @@ let router = new Router({
       path: '/',
       name: 'root',
       component: root,
-      redirect: '/index',
+      redirect: '/login',
       children: [
         index
       ]
