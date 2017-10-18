@@ -5,7 +5,7 @@ const state = {
   user: {},
   allLayers: [],
   selectedLayers: [],
-  // 所有已认领田块id集合
+  // 所有已认领田块集合
   claimedFields: [],
   // 显示模式
   mode: '地区模式'

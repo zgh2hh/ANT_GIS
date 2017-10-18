@@ -9,7 +9,6 @@ export const gradeCrops = ({commit, state, rootState, getters}, parmas) => {
     let type = rootState.common.mode
     layer.renderer = render
     if (type === '大户模式') {
-      debugger
       layer.definitionExpression = 'field_id in (' + climedFieldsIds.join() + ')'
       // commit('TOGGLE_MODE', {
       //   mode: '大户模式'

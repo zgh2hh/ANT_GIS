@@ -4,7 +4,7 @@
     <div id="viewDiv" class="balt-theme"></div>
     <Edit :show='showEdit' :field='field'></Edit>
     <Claim :show='showClaim'></Claim>
-    <switch-map ref='switchMap'></switch-map>
+    <topic-map ref='topicMap'></topic-map>
     <tool ref='tool'></tool>
     <Crops :topicMap='$store.state.crops.gradeTopicMap'></Crops>
   </div>
@@ -59,12 +59,12 @@ import { mapActions, mapGetters } from 'vuex'
 import CommonHeader from '@/components/common/header'
 import Edit from './edit'
 import Claim from './claim'
-import SwitchMap from '@/components/common/switchMap'
+import TopicMap from '@/components/common/topicMap'
 import tool from '@/components/common/tool'
 import Crops from '../../crop/pages/crops'
 export default {
   components: {
-    Edit, Claim, SwitchMap, Crops, CommonHeader, tool
+    Edit, Claim, TopicMap, Crops, CommonHeader, tool
   },
   data () {
     return {
@@ -161,7 +161,7 @@ export default {
           let view = that.$store.state.index.view
           const topicMapExpand = new ESRI.Expand({
             view: view,
-            content: that.$refs['switchMap'].$el,
+            content: that.$refs['topicMap'].$el,
             expandIconClass: 'esri-icon-basemap',
             expandTooltip: '专题图'
           })
@@ -183,7 +183,7 @@ export default {
           let view = that.$store.state.index.view
           const topicMapExpand = new ESRI.Expand({
             view: view,
-            content: that.$refs['switchMap'].$el,
+            content: that.$refs['topicMap'].$el,
             expandIconClass: 'esri-icon-collection',
             expandTooltip: '专题图'
           })

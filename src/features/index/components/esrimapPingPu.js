@@ -87,7 +87,7 @@ export const createMap = function (loader, callback) {
       // 5.加载平铺和许镇所有田块
       var draw = new FeatureLayer({
         id: 'draw',
-        title: '所有田块',
+        title: '田块',
         url: 'https://60.169.69.3:6443/arcgis/rest/services/FeatureService/FeatureService/FeatureServer/2',
         outFields: ['*'],
         popupTemplate: { // autocast as esri/PopupTemplate

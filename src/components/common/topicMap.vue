@@ -1,16 +1,20 @@
 <template>
   <div class="esri-widget esri-widget--panel">
     <div class="box">
-      <div class="item" @click="toggleMap(type.gradeByFields)">按田块分级统计图</div>
-      <div class="item" @click="toggleMap(type.rs)">原始遥感监测图</div>
-      <div class="item" @click="toggleMap(type.grade)">分级统计图</div>
+      <div class="item" @click="toggleTopicMap('crops')">作物分类</div>
+      <div class="item">土壤养分</div>
+      <div class="item">病虫害</div>
+      <div class="item">长势</div>
+      <div class="item">单产估算</div>
+      <div class="item">成熟期预测</div>
+      <div class="item">旱情</div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'switchMap',
+  name: 'topicMap',
   props: {
     show: {
       type: Boolean,
@@ -19,23 +23,12 @@ export default {
   },
   data () {
     return {
-      type: {
-        gradeByFields: 'gradeByFields',
-        rs: 'rs',
-        grade: 'grade'
-      }
     }
   },
   methods: {
-    toggleMap (type) {
+    toggleTopicMap (type) {
       switch (type) {
-        case 'gradeByFields':
-          this.$store.commit('TOGGLE_TOPIC_MAP', {topicMap: type})
-          break
-        case 'rs':
-          this.$store.commit('TOGGLE_TOPIC_MAP', {topicMap: type})
-          break
-        case 'grade':
+        case 'crops':
           this.$store.commit('TOGGLE_TOPIC_MAP', {topicMap: type})
           break
         default:
