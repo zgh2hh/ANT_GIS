@@ -5,6 +5,7 @@
     <Edit :show='showEdit' :field='field'></Edit>
     <Claim :show='showClaim'></Claim>
     <switch-map ref='switchMap'></switch-map>
+    <tool ref='tool'></tool>
     <Crops :topicMap='$store.state.crops.gradeTopicMap'></Crops>
   </div>
 </template>
@@ -59,10 +60,11 @@ import CommonHeader from '@/components/common/header'
 import Edit from './edit'
 import Claim from './claim'
 import SwitchMap from '@/components/common/switchMap'
+import tool from '@/components/common/tool'
 import Crops from '../../crop/pages/crops'
 export default {
   components: {
-    Edit, Claim, SwitchMap, Crops, CommonHeader
+    Edit, Claim, SwitchMap, Crops, CommonHeader, tool
   },
   data () {
     return {
@@ -164,6 +166,7 @@ export default {
             expandTooltip: '专题图'
           })
           view.ui.add(topicMapExpand, 'top-right')
+          view.ui.add(this.$refs['tool'].$el, 'top-left')
         })
       }, {
         url: 'https://js.arcgis.com/4.5/'
@@ -185,6 +188,7 @@ export default {
             expandTooltip: '专题图'
           })
           view.ui.add(topicMapExpand, 'top-right')
+          view.ui.add(this.$refs['tool'].$el, 'top-left')
         })
       })
     }
@@ -192,7 +196,6 @@ export default {
 }
 </script>
 <style scoped>
-@import url('https://js.arcgis.com/4.5/esri/themes/light/main.css');
 /*@import url('http://localhost:8080/arcgis_js_api44/library/4.4/esri/themes/light/main.css');*/
 .nav.is-default {
   background-color: #f5f5f5;
