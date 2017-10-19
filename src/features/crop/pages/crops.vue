@@ -42,16 +42,24 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['gradeCrops']),
+    ...mapActions(['gradeCrops', 'loadRemoteSensingMap', 'resetAllLayer']),
     classifyCrops () { // 作物分类
       const { map } = this.$store.state.index
       let draw = map.findLayerById('draw')
-      this.gradeCrops({
+      return this.gradeCrops({
         layer: draw,
         render: this.createRender()
       })
     },
     loadRsImage () { // 切换遥感底图
+      return this.loadRemoteSensingMap({
+        render: this.createSimpleRender()
+      })
+    },
+    resetLayer () {
+      return this.resetAllLayer({
+        render: this.createSimpleRender()
+      })
     },
     createRender () {
       const { ESRI } = this.$store.state.index
@@ -87,6 +95,12 @@ export default {
           }]
       })
     },
+    createSimpleRender () {
+      const { ESRI } = this.$store.state.index
+      return new ESRI.SimpleRenderer({
+        symbol: this.createSimpleFill([0, 255, 255, 0.1])
+      })
+    },
     createSimpleFill (color = 'gray') {
       const {ESRI} = this.$store.state.index
       return new ESRI.SimpleFillSymbol({
@@ -106,21 +120,40 @@ export default {
     // 监控传入的topicMap值
     'topicMap': function (val, oldVal) {
       if (val === 'crops') {
-        // 分级作物
-        this.classifyCrops()
+        debugger
+        this.resetLayer().then(() => {
+          if (this.baseMap === 'gradeMap') { // 分级统计图
+            // 分级作物
+            this.classifyCrops()
+          } else if (this.baseMap === 'fieldGradeMap') { // 按田块分级统计图
+
+          } else if (this.baseMap === 'rsMap') { // 原始遥感监测图
+            // 加载遥感影像
+            this.loadRsImage()
+          } else {
+            this.resetLayer()
+          }
+        })
       }
     },
     // 监控传入的topicMap值
     'baseMap': function (val, oldVal) {
       if (this.topicMap === 'crops') {
-        if (val === 'gradeMap') { // 分级统计图
-          // 分级作物
-          this.classifyCrops()
-        } else if (val === 'fieldGradeMap') { // 按田块分级统计图
+        debugger
+        this.resetLayer().then(() => {
+          if (val === 'gradeMap') { // 分级统计图
+            // 分级作物
+            this.classifyCrops()
+          } else if (val === 'fieldGradeMap') { // 按田块分级统计图
 
-        } else { // 原始遥感监测图
-
-        }
+          } else if (val === 'rsMap') { // 原始遥感监测图
+            // 加载遥感影像
+            this.loadRsImage()
+          } else {
+            debugger
+            this.resetLayer()
+          }
+        })
       }
     }
   }

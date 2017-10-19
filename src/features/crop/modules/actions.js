@@ -3,6 +3,7 @@
 /** 作物分类分级渲染 */
 export const gradeCrops = ({commit, state, rootState, getters}, parmas) => {
   return new Promise((resolve, reject) => {
+    debugger
     const {view, ESRI} = rootState.index
     let {climedFieldsIds} = getters
     let {layer, render} = parmas
@@ -28,23 +29,25 @@ export const gradeCrops = ({commit, state, rootState, getters}, parmas) => {
     // 添加图例
     view.then(() => {
       view.ui.add(legend, 'bottom-left')
+      resolve('success')
     })
   })
 }
 
-/** 切换底图 */
-export const switchBaseMap = ({commit, state, rootState, getters}, parmas) => {
+/** 加载遥感影像 */
+export const loadRemoteSensingMap = ({commit, state, rootState, getters}, parmas) => {
   return new Promise((resolve, reject) => {
-    const {view, ESRI} = rootState.index
-    let {climedFieldsIds} = getters
-    let {layer, render} = parmas
-    let type = rootState.common.mode
-    layer.renderer = render
-    if (type === '大户模式') {
-      layer.definitionExpression = 'field_id in (' + climedFieldsIds.join() + ')'
-    } else {
-      layer.definitionExpression = ''
-    }
+    const {map, view, ESRI} = rootState.index
+    // let {render} = parmas
+    // 田块
+    // let draw = map.findLayerById('draw')
+    // draw.render = render
+    // 作物遥感影像
+    let rsImageLayerSet = map.findLayerById('image')
+    let cropTypeRsLayer = rsImageLayerSet.allSublayers.find(function (sublayer) {
+      return sublayer.id === 6
+    })
+    cropTypeRsLayer.visible = true
 
     // 移除legend
     view.ui.empty('bottom-left')
@@ -52,7 +55,7 @@ export const switchBaseMap = ({commit, state, rootState, getters}, parmas) => {
       view: view,
       layerInfos: [
         {
-          layer: layer,
+          layer: cropTypeRsLayer,
           title: `作物分类专题图`
         }]
     })
@@ -60,10 +63,28 @@ export const switchBaseMap = ({commit, state, rootState, getters}, parmas) => {
     // 添加图例
     view.then(() => {
       view.ui.add(legend, 'bottom-left')
+      resolve('success')
     })
-    // 保存当前专题图
-    commit('TOGGLE_TOPIC_MAP', {
-      topicMap: 'crops'
+  })
+}
+
+/** 加载遥感影像 */
+export const resetAllLayer = ({commit, state, rootState, getters}, parmas) => {
+  return new Promise((resolve, reject) => {
+    const {map, view} = rootState.index
+    let {render} = parmas
+    // 田块
+    let draw = map.findLayerById('draw')
+    draw.render = render
+    // 作物遥感影像
+    let rsImageLayerSet = map.findLayerById('image')
+    let cropTypeRsLayer = rsImageLayerSet.allSublayers.find(function (sublayer) {
+      return sublayer.id === 6
     })
+    cropTypeRsLayer.visible = false
+
+    // 移除legend
+    view.ui.empty('bottom-left')
+    resolve('success')
   })
 }

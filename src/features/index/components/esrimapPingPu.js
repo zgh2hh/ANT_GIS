@@ -52,6 +52,11 @@ export const createMap = function (loader, callback) {
         visible: true,
         sublayers: [// id顺序必须为倒序，否则影像不能同时展示，只能展示一个
           {
+            id: 6,
+            visible: false,
+            title: '作物分类影像'
+          },
+          {
             id: 5,
             visible: false,
             title: '钾(K)分布'

@@ -12,7 +12,7 @@ const state = {
   // 当前专题图
   topicMap: '',
   // 当前底图
-  baseMap: ''
+  baseMap: 'origin'
 }
 
 const getters = {
