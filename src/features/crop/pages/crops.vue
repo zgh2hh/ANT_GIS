@@ -51,7 +51,7 @@ export default {
         render: this.createRender()
       })
     },
-    switchMap () { // 切换底图
+    loadRsImage () { // 切换遥感底图
     },
     createRender () {
       const { ESRI } = this.$store.state.index
@@ -112,13 +112,15 @@ export default {
     },
     // 监控传入的topicMap值
     'baseMap': function (val, oldVal) {
-      if (val === 'gradeMap') { // 分级统计图
-        // 分级作物
-        this.classifyCrops()
-      } else if (val === 'fieldGradeMap') { // 按田块分级统计图
+      if (this.topicMap === 'crops') {
+        if (val === 'gradeMap') { // 分级统计图
+          // 分级作物
+          this.classifyCrops()
+        } else if (val === 'fieldGradeMap') { // 按田块分级统计图
 
-      } else { // 原始遥感监测图
+        } else { // 原始遥感监测图
 
+        }
       }
     }
   }
