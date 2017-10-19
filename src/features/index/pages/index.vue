@@ -7,6 +7,7 @@
     <topic-map ref='topicMap'></topic-map>
     <switch-map ref='switchMap'></switch-map>
     <tool ref='tool'></tool>
+    <chart ref='chart'></chart>
     <Crops :topicMap='$store.state.common.topicMap' :baseMap='$store.state.common.baseMap'></Crops>
   </div>
 </template>
@@ -63,10 +64,11 @@ import Claim from './claim'
 import TopicMap from '@/components/common/topicMap'
 import SwitchMap from '@/components/common/switchMap'
 import tool from '@/components/common/tool'
+import chart from '@/components/common/charts'
 import Crops from '../../crop/pages/crops'
 export default {
   components: {
-    Edit, Claim, TopicMap, SwitchMap, Crops, CommonHeader, tool
+    Edit, Claim, TopicMap, SwitchMap, Crops, CommonHeader, tool, chart
   },
   data () {
     return {
@@ -177,6 +179,7 @@ export default {
           })
           view.ui.add(topicMapExpand, 'top-right')
           view.ui.add(switchMapExpand, 'top-right')
+          view.ui.add(this.$refs['chart'].$el, 'top-right')
           view.ui.add(this.$refs['tool'].$el, 'top-left')
         })
       }, {
@@ -208,6 +211,7 @@ export default {
           })
           view.ui.add(topicMapExpand, 'top-right')
           view.ui.add(switchMapExpand, 'top-right')
+          view.ui.add(this.$refs['chart'].$el, 'top-right')
           view.ui.add(this.$refs['tool'].$el, 'top-left')
         })
       })
