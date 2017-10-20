@@ -3,13 +3,12 @@
 /** 作物分类分级渲染 */
 export const gradeCrops = ({commit, state, rootState, getters}, parmas) => {
   return new Promise((resolve, reject) => {
-    debugger
     const {view, ESRI} = rootState.index
-    let {climedFieldsIds} = getters
     let {layer, render} = parmas
     let type = rootState.common.mode
     layer.renderer = render
     if (type === '大户模式') {
+      let {climedFieldsIds} = getters
       layer.definitionExpression = 'field_id in (' + climedFieldsIds.join() + ')'
     } else {
       layer.definitionExpression = ''
@@ -38,10 +37,6 @@ export const gradeCrops = ({commit, state, rootState, getters}, parmas) => {
 export const loadRemoteSensingMap = ({commit, state, rootState, getters}, parmas) => {
   return new Promise((resolve, reject) => {
     const {map, view, ESRI} = rootState.index
-    // let {render} = parmas
-    // 田块
-    // let draw = map.findLayerById('draw')
-    // draw.render = render
     // 作物遥感影像
     let rsImageLayerSet = map.findLayerById('image')
     let cropTypeRsLayer = rsImageLayerSet.allSublayers.find(function (sublayer) {
@@ -75,7 +70,7 @@ export const resetAllLayer = ({commit, state, rootState, getters}, parmas) => {
     let {render} = parmas
     // 田块
     let draw = map.findLayerById('draw')
-    draw.render = render
+    draw.renderer = render
     // 作物遥感影像
     let rsImageLayerSet = map.findLayerById('image')
     let cropTypeRsLayer = rsImageLayerSet.allSublayers.find(function (sublayer) {

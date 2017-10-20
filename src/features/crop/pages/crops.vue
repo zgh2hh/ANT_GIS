@@ -52,9 +52,7 @@ export default {
       })
     },
     loadRsImage () { // 切换遥感底图
-      return this.loadRemoteSensingMap({
-        render: this.createSimpleRender()
-      })
+      return this.loadRemoteSensingMap()
     },
     resetLayer () {
       return this.resetAllLayer({
@@ -120,7 +118,6 @@ export default {
     // 监控传入的topicMap值
     'topicMap': function (val, oldVal) {
       if (val === 'crops') {
-        debugger
         this.resetLayer().then(() => {
           if (this.baseMap === 'gradeMap') { // 分级统计图
             // 分级作物
@@ -139,7 +136,6 @@ export default {
     // 监控传入的topicMap值
     'baseMap': function (val, oldVal) {
       if (this.topicMap === 'crops') {
-        debugger
         this.resetLayer().then(() => {
           if (val === 'gradeMap') { // 分级统计图
             // 分级作物
@@ -150,7 +146,6 @@ export default {
             // 加载遥感影像
             this.loadRsImage()
           } else {
-            debugger
             this.resetLayer()
           }
         })
