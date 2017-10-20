@@ -12,8 +12,8 @@
     </div>
     <span class="mapType">切换图像</span>
     <div class="base-map box">
-      <div v-bind:class="[baseMapStyle.selected === 'gradeMap' ? baseMapStyle.active : '', baseMapStyle.item]" @click="toggleBaseMap(baseMap.gradeMap)">分级统计图</div>
       <div v-bind:class="[baseMapStyle.selected === 'fieldGradeMap' ? baseMapStyle.active : '', baseMapStyle.item]" @click="toggleBaseMap(baseMap.fieldGradeMap)">按田块分级统计图</div>
+      <div v-bind:class="[baseMapStyle.selected === 'gradeMap' ? baseMapStyle.active : '', baseMapStyle.item]" @click="toggleBaseMap(baseMap.gradeMap)">分级统计图</div>
       <div v-bind:class="[baseMapStyle.selected === 'rsMap' ? baseMapStyle.active : '', baseMapStyle.item]" @click="toggleBaseMap(baseMap.rsMap)">原始遥感监测图</div>
       <div v-bind:class="[baseMapStyle.selected === 'origin' ? baseMapStyle.active : '', baseMapStyle.item]" @click="toggleBaseMap(baseMap.origin)">原始图</div>
     </div>

@@ -235,10 +235,15 @@ input {
 #viewDiv {
   position: absolute;
   top: 3.5rem;
+  /* top: 0; */
   bottom: 0;
   left: 0;
   right: 0;
 }
+
+/* #viewDiv .esri-ui-corner-container{
+  top: 68px !important;
+} */
 
 .card{
   width: 25%;
@@ -257,4 +262,5 @@ input {
   top: 50%;
   transform: translateY(-50%);
 }
+
 </style>

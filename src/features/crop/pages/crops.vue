@@ -73,7 +73,7 @@ export default {
             color: 'white'
           }
         }),
-        defaultLabel: 'no data',
+        defaultLabel: '未知',
         classBreakInfos: [
           {
             minValue: config.classBreak[0].min,
@@ -120,10 +120,10 @@ export default {
       if (val === 'crops') {
         this.resetLayer().then(() => {
           if (this.baseMap === 'gradeMap') { // 分级统计图
-            // 分级作物
-            this.classifyCrops()
-          } else if (this.baseMap === 'fieldGradeMap') { // 按田块分级统计图
+            // 田块内部分级
 
+          } else if (this.baseMap === 'fieldGradeMap') { // 按田块分级统计图
+            this.classifyCrops()
           } else if (this.baseMap === 'rsMap') { // 原始遥感监测图
             // 加载遥感影像
             this.loadRsImage()
@@ -137,11 +137,11 @@ export default {
     'baseMap': function (val, oldVal) {
       if (this.topicMap === 'crops') {
         this.resetLayer().then(() => {
-          if (val === 'gradeMap') { // 分级统计图
-            // 分级作物
-            this.classifyCrops()
-          } else if (val === 'fieldGradeMap') { // 按田块分级统计图
+          if (val === 'gradeMap') { // 田块内部分级
+            // 田块内部分级
 
+          } else if (val === 'fieldGradeMap') { // 按田块分级统计图
+            this.classifyCrops()
           } else if (val === 'rsMap') { // 原始遥感监测图
             // 加载遥感影像
             this.loadRsImage()
