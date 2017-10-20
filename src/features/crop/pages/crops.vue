@@ -52,7 +52,9 @@ export default {
       })
     },
     loadRsImage () { // 切换遥感底图
-      return this.loadRemoteSensingMap()
+      return this.loadRemoteSensingMap({
+        legendDom: this.$parent.$refs['legend'].$el
+      })
     },
     resetLayer () {
       return this.resetAllLayer({
@@ -133,7 +135,7 @@ export default {
         })
       }
     },
-    // 监控传入的topicMap值
+    // 监控传入的baseMap值
     'baseMap': function (val, oldVal) {
       if (this.topicMap === 'crops') {
         this.resetLayer().then(() => {

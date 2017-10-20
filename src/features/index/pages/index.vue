@@ -7,6 +7,7 @@
     <topic-map ref='topicMap'></topic-map>
     <tool ref='tool'></tool>
     <chart ref='chart'></chart>
+    <custom-legend ref='legend'></custom-legend>
     <Crops :topicMap='$store.state.common.topicMap' :baseMap='$store.state.common.baseMap'></Crops>
   </div>
 </template>
@@ -64,9 +65,10 @@ import TopicMap from '@/components/common/topicMap'
 import tool from '@/components/common/tool'
 import chart from '@/components/common/charts'
 import Crops from '../../crop/pages/crops'
+import CustomLegend from '@/components/common/legend'
 export default {
   components: {
-    Edit, Claim, TopicMap, Crops, CommonHeader, tool, chart
+    Edit, Claim, TopicMap, Crops, CommonHeader, tool, chart, CustomLegend
   },
   data () {
     return {

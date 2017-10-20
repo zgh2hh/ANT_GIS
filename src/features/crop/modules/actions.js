@@ -36,7 +36,7 @@ export const gradeCrops = ({commit, state, rootState, getters}, parmas) => {
 /** 加载遥感影像 */
 export const loadRemoteSensingMap = ({commit, state, rootState, getters}, parmas) => {
   return new Promise((resolve, reject) => {
-    const {map, view, ESRI} = rootState.index
+    const {map, view} = rootState.index
     // 作物遥感影像
     let rsImageLayerSet = map.findLayerById('image')
     let cropTypeRsLayer = rsImageLayerSet.allSublayers.find(function (sublayer) {
@@ -46,18 +46,22 @@ export const loadRemoteSensingMap = ({commit, state, rootState, getters}, parmas
 
     // 移除legend
     view.ui.empty('bottom-left')
-    let legend = new ESRI.Legend({
-      view: view,
-      layerInfos: [
-        {
-          layer: cropTypeRsLayer,
-          title: `作物分类专题图`
-        }]
-    })
+
+    // 田块
+    // let draw = map.findLayerById('draw')
+    // let legend = new ESRI.Legend({
+    //   view: view,
+    //   layerInfos: [
+    //     {
+    //       layer: draw,
+    //       title: `作物分类专题图`
+    //     }]
+    // })
 
     // 添加图例
     view.then(() => {
-      view.ui.add(legend, 'bottom-left')
+      let {legendDom} = parmas
+      view.ui.add(legendDom, 'bottom-left')
       resolve('success')
     })
   })
