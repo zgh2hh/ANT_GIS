@@ -35,6 +35,7 @@ export const createMap = function (loader, callback) {
       // 初始化
       // 1.定义地图
       const map = new Map({
+        // basemap: 'gray'
         basemap: 'satellite'
       })
       // 2.实例化view
