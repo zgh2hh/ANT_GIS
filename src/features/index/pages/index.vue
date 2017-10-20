@@ -173,8 +173,7 @@ export default {
           view.ui.add(this.$refs['tool'].$el, 'top-left')
         })
       }, {
-        url: 'https://js.arcgis.com/4.5/'
-        // url: 'http://localhost:8080/arcgis_js_api44/library/4.4/'
+        url: 'https://gisjs.ahqianmo.com:8092/arcgis_js_api/library/4.5/init.js'
       })
     } else {
       createMap(esriLoader, (map, view, query) => {

@@ -1,6 +1,6 @@
 <template>
   <div class="esri-widget esri-widget--panel">
-    <span>专题图</span>
+    <span class="mapType">专题图</span>
     <div class="topic-map box">
       <div v-bind:class="[topicMapStyle.selected === 'crops' ? topicMapStyle.active : '', topicMapStyle.item]" @click="toggleTopicMap(topicMap.crops)">作物分类</div>
       <div v-bind:class="[topicMapStyle.selected === 'nutrition' ? topicMapStyle.active : '', topicMapStyle.item]" @click="toggleTopicMap(topicMap.nutrition)">土壤养分</div>
@@ -10,7 +10,7 @@
       <div v-bind:class="[topicMapStyle.selected === 'mature' ? topicMapStyle.active : '', topicMapStyle.item]" @click="toggleTopicMap(topicMap.mature)">成熟期预测</div>
       <div v-bind:class="[topicMapStyle.selected === 'drought' ? topicMapStyle.active : '', topicMapStyle.item]" @click="toggleTopicMap(topicMap.drought)">旱情</div>
     </div>
-    <span>切换图像</span>
+    <span class="mapType">切换图像</span>
     <div class="base-map box">
       <div v-bind:class="[baseMapStyle.selected === 'gradeMap' ? baseMapStyle.active : '', baseMapStyle.item]" @click="toggleBaseMap(baseMap.gradeMap)">分级统计图</div>
       <div v-bind:class="[baseMapStyle.selected === 'fieldGradeMap' ? baseMapStyle.active : '', baseMapStyle.item]" @click="toggleBaseMap(baseMap.fieldGradeMap)">按田块分级统计图</div>
@@ -105,5 +105,11 @@ export default {
 .active {
   background: #20a0ff !important;
   color: #FFF;
+}
+
+.mapType{
+    display: block;
+    width: 100%;
+    text-align: center;
 }
 </style>
