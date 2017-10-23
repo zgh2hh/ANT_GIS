@@ -99,3 +99,33 @@ export const displayMode = ({commit, state, rootState}, parmas) => {
     }
   })
 }
+
+/** 根据username查询表user */
+export const queryUserByUsername = ({commit, state}, parmas) => {
+  let {featureLyr, userName} = parmas
+  let query = featureLyr.createQuery()
+  query.where = "user_name = '" + userName + "'"
+  query.outFields = ['*']
+  // query.returnGeometry = false
+  return new Promise((resolve, reject) => {
+    featureLyr.queryFeatures(query).then((results) => {
+      resolve(results)
+    }, (err) => {
+      reject(err)
+    })
+  })
+}
+
+/** 根据新增要素，新增表user中对应记录 */
+export const addUserAction = ({commit, state}, parmas) => {
+  let {user, addFeatures} = parmas
+  return new Promise((resolve, reject) => {
+    user.applyEdits({
+      addFeatures: [...addFeatures]
+    }).then((result) => {
+      resolve(result)
+    }, (err) => {
+      reject(err)
+    })
+  })
+}

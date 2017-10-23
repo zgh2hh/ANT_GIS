@@ -83,11 +83,11 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'showEdit', 'showClaim', 'field', 'climedFieldsIds'
+      'showEdit', 'showClaim', 'field', 'climedFieldsIds', 'User'
     ])
   },
   methods: {
-    ...mapActions(['saveEsri', 'quitLogin', 'queryClaimedFields', 'displayMode']),
+    ...mapActions(['saveEsri', 'quitLogin', 'queryClaimedFields', 'displayMode', 'addUserAction', 'queryUserByUsername']),
     _change (value) {
       this.$store.commit('GET_CURRENT_DIST', {current: value})
       this.selected = value
@@ -144,6 +144,76 @@ export default {
           type: '地区模式'
         })
       }
+    },
+    addUser () {
+      let userObj = JSON.parse(window.localStorage.getItem('user'))
+      const { map } = this.$store.state.index
+      // user表
+      let user = map.findLayerById('user')
+      if (userObj && userObj.user_name) {
+        this.queryUserByUsername({
+          featureLyr: user,
+          userName: userObj.user_name
+        }).then((result) => {
+          // 如果user表中没有此用户
+          if (result.features.length === 0) {
+            let featureParam = this._addFeatureParam()
+            if (featureParam !== null) {
+              this.addUserAction({
+                user,
+                addFeatures: [featureParam]
+              })
+            }
+          }
+        })
+      }
+    },
+    _addFeatureParam () {
+      if (!window.localStorage.getItem('user')) {
+        return null
+      }
+      const { ESRI } = this.$store.state.index
+      const {
+        user_id: userId,
+        user_name: userName,
+        user_phone: phone,
+        cn_name: cnName,
+        farm_id: farmId,
+        farm_name: farmName,
+        is_expert: isExpert,
+        latitude,
+        longitude,
+        province_code: provinceCode,
+        province_name: provinceName,
+        city_code: cityCode,
+        city_name: cityName,
+        area_code: countyCode,
+        area_name: countyName,
+        remain_address: remain,
+        address_detail: addressDetail
+        } = JSON.parse(window.localStorage.getItem('user'))
+      let attributes = {}
+      attributes['user_id'] = userId
+      attributes['user_name'] = userName
+      attributes['user_phone'] = phone
+      attributes['cn_name'] = cnName
+      attributes['farm_id'] = farmId
+      attributes['farm_name'] = farmName
+      attributes['is_expert'] = isExpert
+      attributes['latitude'] = latitude
+      attributes['longitude'] = longitude
+      attributes['province_code_'] = provinceCode
+      attributes['province_name_'] = provinceName
+      attributes['city_code_'] = cityCode
+      attributes['city_name_'] = cityName
+      attributes['county_code_'] = countyCode
+      attributes['county_name_'] = countyName
+      attributes['remain_address_'] = remain
+      attributes['full_address_'] = addressDetail
+      // 存储几何信息
+      return new ESRI.Graphic({
+        attributes: attributes
+      })
     }
   },
   created () {
@@ -199,6 +269,12 @@ export default {
         })
       })
     }
+  },
+  mounted () {
+    let that = this
+    window.setTimeout(function () {
+      that.addUser()
+    }, 5000)
   }
 }
 </script>

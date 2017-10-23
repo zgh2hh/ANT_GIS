@@ -158,6 +158,15 @@ export const createMap = function (loader, callback) {
         renderer: renderer
       })
       map.add(fieldId2Username)
+      // 7.加载user表信息，登陆后保存用户信息
+      var user = new FeatureLayer({
+        id: 'user',
+        title: '用户信息',
+        url: 'https://60.169.69.3:6443/arcgis/rest/services/FeatureService/FeatureService/FeatureServer/5',
+        outFields: ['*'],
+        objectIdField: 'user_id'
+      })
+      map.add(user)
 
       view.then(() => {
         const legend = new Legend({
