@@ -4621,6 +4621,10 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-axios@^2.0.2:
+  version "2.0.2"
+  resolved "http://registry.npm.taobao.org/vue-axios/download/vue-axios-2.0.2.tgz#0fe5a69f1edb09a1cd6c4a7f88c74d2fb7fe1778"
+
 vue-echarts@^2.4.1:
   version "2.4.1"
   resolved "http://registry.npm.taobao.org/vue-echarts/download/vue-echarts-2.4.1.tgz#138ec92a03fd08e87e9cf9d2a5e71f6a907f971a"
