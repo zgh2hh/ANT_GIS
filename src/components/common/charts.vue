@@ -91,7 +91,7 @@ export default {
     }
   },
   created () {
-    axios.get('http://192.168.1.117:9090/api/findCropArea').then((res) => {
+    axios.get('http://192.168.5.108:9012/api/findCropArea').then((res) => {
       let area = []
       let data = []
       for (let i = 0; i < res.data.data.length; i++) {
@@ -102,7 +102,7 @@ export default {
       this.bar.series[0].data = data
     })
 
-    axios.get('http://192.168.1.117:9090/api/findUserPercent').then((res) => {
+    axios.get('http://192.168.5.108:9012/api/findUserPercent').then((res) => {
       let type = []
       let data = []
       for (let i = 0; i < res.data.data.length; i++) {
