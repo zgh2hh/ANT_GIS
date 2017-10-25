@@ -1,5 +1,8 @@
 <template>
   <div>
+    <button class="button is-success claim" @click="_toggleClaim" :disabled='showClaim'>
+      认领田块
+    </button>
     <common-header v-on:modeChange='changeMode'></common-header>
     <div id="viewDiv" class="balt-theme"></div>
     <Edit :show='showEdit' :field='field'></Edit>
@@ -280,6 +283,11 @@ export default {
 </script>
 <style scoped>
 /*@import url('http://localhost:8080/arcgis_js_api44/library/4.4/esri/themes/light/main.css');*/
+.claim{
+    float: right;
+    z-index: 12;
+}
+
 .nav.is-default {
   background-color: #f5f5f5;
   margin-bottom: 2rem;
